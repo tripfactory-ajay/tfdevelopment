@@ -1721,8 +1721,15 @@
             const password = document.getElementById('password').value;
             
             if (username === 'TripFactory' && password === 'AKdev') {
-                document.getElementById('loginModal').classList.add('hidden');
-                document.getElementById('mainApp').classList.remove('hidden');
+                // Hide login modal completely
+                const loginModal = document.getElementById('loginModal');
+                loginModal.style.display = 'none';
+                
+                // Show main app
+                const mainApp = document.getElementById('mainApp');
+                mainApp.classList.remove('hidden');
+                
+                // Store auth
                 localStorage.setItem('tfdev_auth', 'true');
             } else {
                 document.getElementById('loginError').classList.remove('hidden');
@@ -1735,10 +1742,15 @@
         }
 
         // Check auth on load
-        if (localStorage.getItem('tfdev_auth') === 'true') {
-            document.getElementById('loginModal').classList.add('hidden');
-            document.getElementById('mainApp').classList.remove('hidden');
-        }
+        window.addEventListener('DOMContentLoaded', function() {
+            if (localStorage.getItem('tfdev_auth') === 'true') {
+                const loginModal = document.getElementById('loginModal');
+                loginModal.style.display = 'none';
+                
+                const mainApp = document.getElementById('mainApp');
+                mainApp.classList.remove('hidden');
+            }
+        });
 
         // Navigation
         function showSection(sectionId) {
@@ -1871,4 +1883,3 @@
     </script>
 </body>
 </html>
-
