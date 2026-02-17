@@ -26,31 +26,534 @@
         .syntax-number { color: #d19a66; }
         .external-link { position: relative; }
         .external-link::after { content: '↗'; font-size: 0.7em; margin-left: 4px; opacity: 0.7; }
-        .data-table { font-size: 0.875rem; }
-        .data-table th { background-color: #f1f5f9; font-weight: 600; text-align: left; padding: 0.75rem; border-bottom: 2px solid #e2e8f0; }
-        .data-table td { padding: 0.75rem; border-bottom: 1px solid #e2e8f0; vertical-align: top; }
-        .data-table tr:hover { background-color: #f8fafc; }
-        .priority-high { color: #dc2626; font-weight: 600; }
-        .priority-medium { color: #ea580c; }
-        .priority-low { color: #16a34a; }
-        .example-box { background-color: #f0f9ff; border-left: 4px solid #0ea5e9; padding: 1rem; margin: 0.5rem 0; border-radius: 0 0.375rem 0.375rem 0; }
     </style>
 </head>
 <body class="bg-slate-50">
 
-    <!-- Login Modal -->
-    <div id="loginModal" class="fixed inset-0 bg-slate-900/80 backdrop-blur-sm z-50 flex items-center justify-center">
-        <div class="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md mx-4">
-            <div class="text-center mb-8">
-                <div class="h-16 w-16 bg-blue-600 rounded-xl mx-auto mb-4 flex items-center justify-center text-white text-2xl font-bold">TF</div>
-                <h1 class="text-2xl font-bold text-slate-800">Development Hub</h1>
-                <p class="text-slate-500 mt-2">Technical Specification and Project Management</p>
-            </div>
-            <form id="loginForm" class="space-y-4">
-                <div>
-                    <label class="block text-sm font-medium text-slate-700 mb-1">Username</label>
-                    <input type="text" id="username" value="TripFactory" class="w-full px-4 py-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition" placeholder="Enter username">
+    <!-- Login Modal - Fixed to scroll -->
+    <div id="loginModal" class="fixed inset-0 bg-slate-900/80 backdrop-blur-sm z-50 overflow-y-auto">
+        <div class="min-h-screen flex items-center justify-center p-4">
+            <div class="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md my-8">
+                <div class="text-center mb-6">
+                    <div class="h-16 w-16 bg-blue-600 rounded-xl mx-auto mb-4 flex items-center justify-center text-white text-2xl font-bold">TF</div>
+                    <h1 class="text-2xl font-bold text-slate-800">Development Hub</h1>
+                    <p class="text-slate-500 mt-2 text-sm">Technical Specification and Project Management</p>
                 </div>
-                <div>
-                    <label class="block text-sm font-medium text-slate-700 mb-1">Password</label>
-                    <input type="password" id="password" value="AKdev" class="w-full px-4 py-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline
+                <form id="loginForm" class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-1">Username</label>
+                        <input type="text" id="username" value="TripFactory" class="w-full px-4 py-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition" placeholder="Enter username">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-1">Password</label>
+                        <input type="password" id="password" value="AKdev" class="w-full px-4 py-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition" placeholder="Enter password">
+                    </div>
+                    <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-lg transition duration-200 flex items-center justify-center gap-2">
+                        <i class="fas fa-sign-in-alt"></i> Access Hub
+                    </button>
+                </form>
+                <p id="loginError" class="text-red-500 text-sm text-center mt-4 hidden">Invalid credentials. Please try again.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Application -->
+    <div id="mainApp" class="hidden min-h-screen">
+        <!-- Header -->
+        <header class="bg-white border-b border-slate-200 sticky top-0 z-40">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex justify-between items-center h-16">
+                    <div class="flex items-center gap-4">
+                        <div class="h-10 w-10 bg-blue-600 rounded-lg flex items-center justify-center text-white font-bold">TF</div>
+                        <div>
+                            <h1 class="text-xl font-bold text-slate-800">Development Hub</h1>
+                            <p class="text-xs text-slate-500">Technical Specification v2.2</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-4">
+                        <span class="px-3 py-1 bg-green-100 text-green-700 rounded-full text-sm font-medium flex items-center gap-2">
+                            <span class="w-2 h-2 bg-green-500 rounded-full pulse-dot"></span> Live Document
+                        </span>
+                        <button onclick="logout()" class="text-slate-500 hover:text-slate-700 px-3 py-2 rounded-lg hover:bg-slate-100 transition">
+                            <i class="fas fa-sign-out-alt"></i> Logout
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Navigation -->
+        <nav class="bg-white border-b border-slate-200">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex space-x-8 overflow-x-auto">
+                    <button onclick="showSection('overview')" class="nav-tab tab-active py-4 px-2 text-sm font-medium border-b-2 border-transparent hover:text-blue-600 transition whitespace-nowrap" data-section="overview">
+                        <i class="fas fa-home mr-2"></i>Overview
+                    </button>
+                    <button onclick="showSection('algorithms')" class="nav-tab py-4 px-2 text-sm font-medium text-slate-500 border-b-2 border-transparent hover:text-blue-600 transition whitespace-nowrap" data-section="algorithms">
+                        <i class="fas fa-calculator mr-2"></i>Algorithms
+                    </button>
+                    <button onclick="showSection('dashboards')" class="nav-tab py-4 px-2 text-sm font-medium text-slate-500 border-b-2 border-transparent hover:text-blue-600 transition whitespace-nowrap" data-section="dashboards">
+                        <i class="fas fa-chart-line mr-2"></i>Dashboards
+                    </button>
+                    <button onclick="showSection('data')" class="nav-tab py-4 px-2 text-sm font-medium text-slate-500 border-b-2 border-transparent hover:text-blue-600 transition whitespace-nowrap" data-section="data">
+                        <i class="fas fa-database mr-2"></i>Data
+                    </button>
+                    <button onclick="showSection('skills')" class="nav-tab py-4 px-2 text-sm font-medium text-slate-500 border-b-2 border-transparent hover:text-blue-600 transition whitespace-nowrap" data-section="skills">
+                        <i class="fas fa-users-cog mr-2"></i>Skills
+                    </button>
+                    <button onclick="showSection('architecture')" class="nav-tab py-4 px-2 text-sm font-medium text-slate-500 border-b-2 border-transparent hover:text-blue-600 transition whitespace-nowrap" data-section="architecture">
+                        <i class="fas fa-sitemap mr-2"></i>Architecture
+                    </button>
+                    <button onclick="openSprints()" class="nav-tab py-4 px-2 text-sm font-medium text-slate-500 border-b-2 border-transparent hover:text-blue-600 transition whitespace-nowrap external-link">
+                        <i class="fas fa-tasks mr-2"></i>Sprints
+                    </button>
+                    <button onclick="openTeam()" class="nav-tab py-4 px-2 text-sm font-medium text-slate-500 border-b-2 border-transparent hover:text-blue-600 transition whitespace-nowrap external-link">
+                        <i class="fas fa-users mr-2"></i>Team
+                    </button>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Content -->
+        <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            
+            <!-- OVERVIEW SECTION -->
+            <section id="overview" class="space-y-6">
+                <div class="bg-gradient-to-r from-blue-600 to-indigo-700 rounded-2xl p-8 text-white">
+                    <h2 class="text-3xl font-bold mb-4">TripFactory Dashboard Ecosystem</h2>
+                    <p class="text-blue-100 text-lg mb-6">Comprehensive technical specification for the complete business intelligence and operational management platform.</p>
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                        <div class="bg-white/10 backdrop-blur rounded-lg p-4">
+                            <div class="text-3xl font-bold">18+</div>
+                            <div class="text-sm text-blue-200">Dashboard Modules</div>
+                        </div>
+                        <div class="bg-white/10 backdrop-blur rounded-lg p-4">
+                            <div class="text-3xl font-bold">50+</div>
+                            <div class="text-sm text-blue-200">Data Entities</div>
+                        </div>
+                        <div class="bg-white/10 backdrop-blur rounded-lg p-4">
+                            <div class="text-3xl font-bold">88K</div>
+                            <div class="text-sm text-blue-200">Agent Records</div>
+                        </div>
+                        <div class="bg-white/10 backdrop-blur rounded-lg p-4">
+                            <div class="text-3xl font-bold">12</div>
+                            <div class="text-sm text-blue-200">Workflow Stages</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div onclick="openSprints()" class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 hover:border-blue-400 hover:shadow-md transition cursor-pointer group">
+                        <div class="flex items-start justify-between">
+                            <div>
+                                <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-4 group-hover:bg-blue-600 transition">
+                                    <i class="fas fa-tasks text-blue-600 text-xl group-hover:text-white transition"></i>
+                                </div>
+                                <h3 class="text-lg font-bold text-slate-800 mb-2">Sprint Tracker</h3>
+                                <p class="text-sm text-slate-600">Meeting notes, progress updates, and blocker tracking.</p>
+                            </div>
+                            <i class="fas fa-arrow-right text-slate-300 group-hover:text-blue-600 transition"></i>
+                        </div>
+                    </div>
+
+                    <div onclick="openTeam()" class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 hover:border-green-400 hover:shadow-md transition cursor-pointer group">
+                        <div class="flex items-start justify-between">
+                            <div>
+                                <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mb-4 group-hover:bg-green-600 transition">
+                                    <i class="fas fa-users text-green-600 text-xl group-hover:text-white transition"></i>
+                                </div>
+                                <h3 class="text-lg font-bold text-slate-800 mb-2">Development Team</h3>
+                                <p class="text-sm text-slate-600">Team directory with skills matrix and contact information.</p>
+                            </div>
+                            <i class="fas fa-arrow-right text-slate-300 group-hover:text-green-600 transition"></i>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ALGORITHMS SECTION -->
+            <section id="algorithms" class="hidden space-y-6">
+                <h2 class="text-3xl font-bold gradient-text">Algorithms and Calculations</h2>
+                
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+                        <div class="p-4 bg-gradient-to-r from-blue-50 to-indigo-50 border-b border-slate-200">
+                            <h3 class="font-bold text-slate-800">Customer Lifetime Value (LTV)</h3>
+                        </div>
+                        <div class="p-4">
+                            <div class="code-block rounded-lg p-4 text-sm overflow-x-auto">
+                                <pre><code><span class="syntax-comment">// LTV Algorithm</span>
+<span class="syntax-keyword">function</span> <span class="syntax-function">calculateLTV</span>(customer) {
+  <span class="syntax-keyword">const</span> avgBooking = customer.totalRevenue / customer.bookingCount;
+  <span class="syntax-keyword">const</span> frequency = customer.bookingCount / monthsActive;
+  <span class="syntax-keyword">const</span> lifespan = customer.loyaltyTier === 'Platinum' ? 5 : 3;
+  <span class="syntax-keyword">return</span> avgBooking * frequency * 0.18 * lifespan;
+}</code></pre>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+                        <div class="p-4 bg-gradient-to-r from-green-50 to-emerald-50 border-b border-slate-200">
+                            <h3 class="font-bold text-slate-800">Agent Segmentation Score</h3>
+                        </div>
+                        <div class="p-4">
+                            <div class="code-block rounded-lg p-4 text-sm overflow-x-auto">
+                                <pre><code><span class="syntax-comment">// Agent Scoring (0-100)</span>
+<span class="syntax-keyword">function</span> <span class="syntax-function">calculateAgentScore</span>(agent) {
+  <span class="syntax-keyword">const</span> weights = {
+    revenue: 0.35, volume: 0.25, 
+    recency: 0.20, diversity: 0.15, growth: 0.05
+  };
+  <span class="syntax-keyword">return</span> weightedSum(metrics, weights) * 100;
+}</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- DASHBOARDS SECTION -->
+            <section id="dashboards" class="hidden space-y-6">
+                <h2 class="text-3xl font-bold gradient-text">Dashboard Examples</h2>
+                <p class="text-slate-600">Key dashboard modules in the TripFactory ecosystem.</p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
+                        <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-4">
+                            <i class="fas fa-building text-blue-600 text-xl"></i>
+                        </div>
+                        <h3 class="font-bold text-slate-800 mb-2">Command Centre</h3>
+                        <p class="text-sm text-slate-600">Organisational structure, 452 employees, 8 departments, succession planning.</p>
+                    </div>
+                    
+                    <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
+                        <div class="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center mb-4">
+                            <i class="fas fa-users text-orange-600 text-xl"></i>
+                        </div>
+                        <h3 class="font-bold text-slate-800 mb-2">Agent Intelligence</h3>
+                        <p class="text-sm text-slate-600">88,000 agent segmentation, performance scoring, targeting filters.</p>
+                    </div>
+                    
+                    <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
+                        <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mb-4">
+                            <i class="fas fa-chart-pie text-purple-600 text-xl"></i>
+                        </div>
+                        <h3 class="font-bold text-slate-800 mb-2">LTV & Loyalty</h3>
+                        <p class="text-sm text-slate-600">Customer lifetime value, Voyager Club, retention analytics.</p>
+                    </div>
+                    
+                    <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
+                        <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mb-4">
+                            <i class="fas fa-globe text-green-600 text-xl"></i>
+                        </div>
+                        <h3 class="font-bold text-slate-800 mb-2">Market Planner</h3>
+                        <p class="text-sm text-slate-600">Destination analytics, competitor pricing, seasonal trends.</p>
+                    </div>
+                    
+                    <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
+                        <div class="w-12 h-12 bg-pink-100 rounded-lg flex items-center justify-center mb-4">
+                            <i class="fas fa-handshake text-pink-600 text-xl"></i>
+                        </div>
+                        <h3 class="font-bold text-slate-800 mb-2">Supplier Intelligence</h3>
+                        <p class="text-sm text-slate-600">DMC performance, contract management, margin analysis.</p>
+                    </div>
+                    
+                    <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
+                        <div class="w-12 h-12 bg-indigo-100 rounded-lg flex items-center justify-center mb-4">
+                            <i class="fas fa-project-diagram text-indigo-600 text-xl"></i>
+                        </div>
+                        <h3 class="font-bold text-slate-800 mb-2">Workflow Pipeline</h3>
+                        <p class="text-sm text-slate-600">12-stage process tracking, department handoffs, audit trails.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- DATA SECTION -->
+            <section id="data" class="hidden space-y-6">
+                <div class="flex justify-between items-center">
+                    <div>
+                        <h2 class="text-3xl font-bold gradient-text">Data Requirements</h2>
+                        <p class="text-slate-600 mt-2">Comprehensive data model for TripFactory dashboard ecosystem</p>
+                    </div>
+                    <button onclick="exportDataSpecs()" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-sm font-medium transition">
+                        <i class="fas fa-download mr-2"></i>Export
+                    </button>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                    <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 text-center">
+                        <div class="text-3xl font-bold text-blue-600">88K+</div>
+                        <div class="text-sm text-slate-500">Agent Records</div>
+                    </div>
+                    <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 text-center">
+                        <div class="text-3xl font-bold text-green-600">452</div>
+                        <div class="text-sm text-slate-500">Employees</div>
+                    </div>
+                    <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 text-center">
+                        <div class="text-3xl font-bold text-purple-600">500K+</div>
+                        <div class="text-sm text-slate-500">Bookings/Year</div>
+                    </div>
+                    <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 text-center">
+                        <div class="text-3xl font-bold text-orange-600">150+</div>
+                        <div class="text-sm text-slate-500">Destinations</div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+                    <div class="p-4 bg-slate-50 border-b border-slate-200">
+                        <h3 class="font-bold text-slate-800">Core Data Entities</h3>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-sm">
+                            <thead>
+                                <tr class="bg-slate-50 border-b border-slate-200">
+                                    <th class="px-4 py-3 font-semibold text-slate-600">Entity</th>
+                                    <th class="px-4 py-3 font-semibold text-slate-600">Purpose</th>
+                                    <th class="px-4 py-3 font-semibold text-slate-600">Key Fields</th>
+                                    <th class="px-4 py-3 font-semibold text-slate-600">Source</th>
+                                    <th class="px-4 py-3 font-semibold text-slate-600">Update</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-200">
+                                <tr class="hover:bg-slate-50">
+                                    <td class="px-4 py-4 font-medium">Employees</td>
+                                    <td class="px-4 py-4 text-slate-600">Org structure, 452 staff</td>
+                                    <td class="px-4 py-4 text-slate-600 text-xs">employee_id, name, email, department_id, role, level, manager_id, location</td>
+                                    <td class="px-4 py-4 text-slate-600">HR System</td>
+                                    <td class="px-4 py-4"><span class="text-xs bg-green-100 text-green-700 px-2 py-1 rounded">Daily</span></td>
+                                </tr>
+                                <tr class="hover:bg-slate-50">
+                                    <td class="px-4 py-4 font-medium">Agents</td>
+                                    <td class="px-4 py-4 text-slate-600">B2B network, 88,000 records</td>
+                                    <td class="px-4 py-4 text-slate-600 text-xs">agent_id, company_name, contact, email, tier, commission_rate, territory, performance_score</td>
+                                    <td class="px-4 py-4 text-slate-600">CRM + Booking Engine</td>
+                                    <td class="px-4 py-4"><span class="text-xs bg-green-100 text-green-700 px-2 py-1 rounded">Real-time</span></td>
+                                </tr>
+                                <tr class="hover:bg-slate-50">
+                                    <td class="px-4 py-4 font-medium">Customers</td>
+                                    <td class="px-4 py-4 text-slate-600">B2C traveller profiles</td>
+                                    <td class="px-4 py-4 text-slate-600 text-xs">customer_id, name, email, country, total_bookings, total_revenue, ltv_score, loyalty_tier</td>
+                                    <td class="px-4 py-4 text-slate-600">CRM</td>
+                                    <td class="px-4 py-4"><span class="text-xs bg-green-100 text-green-700 px-2 py-1 rounded">Real-time</span></td>
+                                </tr>
+                                <tr class="hover:bg-slate-50">
+                                    <td class="px-4 py-4 font-medium">Bookings</td>
+                                    <td class="px-4 py-4 text-slate-600">Transaction records</td>
+                                    <td class="px-4 py-4 text-slate-600 text-xs">booking_id, customer_id, agent_id, destination, travel_date, total_price, supplier_cost, margin, status</td>
+                                    <td class="px-4 py-4 text-slate-600">Booking Engine</td>
+                                    <td class="px-4 py-4"><span class="text-xs bg-green-100 text-green-700 px-2 py-1 rounded">Real-time</span></td>
+                                </tr>
+                                <tr class="hover:bg-slate-50">
+                                    <td class="px-4 py-4 font-medium">Destinations</td>
+                                    <td class="px-4 py-4 text-slate-600">Location master data</td>
+                                    <td class="px-4 py-4 text-slate-600 text-xs">destination_id, name, country, region, currency, popularity_rank, seasonality_profile</td>
+                                    <td class="px-4 py-4 text-slate-600">Master Data</td>
+                                    <td class="px-4 py-4"><span class="text-xs bg-yellow-100 text-yellow-700 px-2 py-1 rounded">Monthly</span></td>
+                                </tr>
+                                <tr class="hover:bg-slate-50">
+                                    <td class="px-4 py-4 font-medium">Suppliers</td>
+                                    <td class="px-4 py-4 text-slate-600">Hotels, DMCs, airlines</td>
+                                    <td class="px-4 py-4 text-slate-600 text-xs">supplier_id, name, type, country, commission_rate, rating, payment_terms, account_manager</td>
+                                    <td class="px-4 py-4 text-slate-600">Procurement</td>
+                                    <td class="px-4 py-4"><span class="text-xs bg-yellow-100 text-yellow-700 px-2 py-1 rounded">Weekly</span></td>
+                                </tr>
+                                <tr class="hover:bg-slate-50">
+                                    <td class="px-4 py-4 font-medium">Competitor Pricing</td>
+                                    <td class="px-4 py-4 text-slate-600">Market intelligence</td>
+                                    <td class="px-4 py-4 text-slate-600 text-xs">competitor_name, destination, product_type, price_gbp, date_scraped, availability</td>
+                                    <td class="px-4 py-4 text-slate-600">Web Scraping</td>
+                                    <td class="px-4 py-4"><span class="text-xs bg-green-100 text-green-700 px-2 py-1 rounded">Daily</span></td>
+                                </tr>
+                                <tr class="hover:bg-slate-50">
+                                    <td class="px-4 py-4 font-medium">Workflow Pipeline</td>
+                                    <td class="px-4 py-4 text-slate-600">12-stage process tracking</td>
+                                    <td class="px-4 py-4 text-slate-600 text-xs">workflow_id, entity_type, current_stage, assigned_to, started_date, target_date, status</td>
+                                    <td class="px-4 py-4 text-slate-600">Workflow Engine</td>
+                                    <td class="px-4 py-4"><span class="text-xs bg-green-100 text-green-700 px-2 py-1 rounded">Real-time</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="bg-amber-50 border border-amber-200 rounded-xl p-6">
+                    <h3 class="font-bold text-amber-800 mb-3"><i class="fas fa-exclamation-triangle mr-2"></i>Critical Data Requirements</h3>
+                    <ul class="space-y-2 text-sm text-amber-700">
+                        <li><strong>GDPR Compliance:</strong> All personal data encrypted at rest with audit trails</li>
+                        <li><strong>Real-time Sync:</strong> Booking data propagates within 5 minutes</li>
+                        <li><strong>Historical Retention:</strong> 7 years for financial reporting and LTV</li>
+                        <li><strong>Data Validation:</strong> Email, phone, currency validation at ingestion</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- SKILLS SECTION -->
+            <section id="skills" class="hidden space-y-6">
+                <h2 class="text-3xl font-bold gradient-text">Required Skill Sets</h2>
+                
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
+                        <h3 class="font-bold text-slate-800 mb-4">Frontend Development</h3>
+                        <div class="space-y-3">
+                            <div>
+                                <div class="flex justify-between text-sm mb-1"><span>React/Vue.js</span><span>Expert</span></div>
+                                <div class="w-full bg-slate-200 rounded-full h-2"><div class="bg-blue-600 h-2 rounded-full" style="width: 95%"></div></div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between text-sm mb-1"><span>Tailwind CSS</span><span>Expert</span></div>
+                                <div class="w-full bg-slate-200 rounded-full h-2"><div class="bg-blue-600 h-2 rounded-full" style="width: 90%"></div></div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between text-sm mb-1"><span>Chart.js/D3.js</span><span>Advanced</span></div>
+                                <div class="w-full bg-slate-200 rounded-full h-2"><div class="bg-blue-600 h-2 rounded-full" style="width: 85%"></div></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
+                        <h3 class="font-bold text-slate-800 mb-4">Backend Development</h3>
+                        <div class="space-y-3">
+                            <div>
+                                <div class="flex justify-between text-sm mb-1"><span>Node.js/Python</span><span>Expert</span></div>
+                                <div class="w-full bg-slate-200 rounded-full h-2"><div class="bg-green-600 h-2 rounded-full" style="width: 90%"></div></div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between text-sm mb-1"><span>PostgreSQL/MongoDB</span><span>Advanced</span></div>
+                                <div class="w-full bg-slate-200 rounded-full h-2"><div class="bg-green-600 h-2 rounded-full" style="width: 85%"></div></div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between text-sm mb-1"><span>REST/GraphQL APIs</span><span>Expert</span></div>
+                                <div class="w-full bg-slate-200 rounded-full h-2"><div class="bg-green-600 h-2 rounded-full" style="width: 90%"></div></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ARCHITECTURE SECTION -->
+            <section id="architecture" class="hidden space-y-6">
+                <h2 class="text-3xl font-bold gradient-text">System Architecture</h2>
+                
+                <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
+                    <h3 class="font-bold text-slate-800 mb-4">Technology Stack</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="flex items-center justify-between p-3 bg-slate-50 rounded-lg">
+                            <span class="font-medium">Frontend</span>
+                            <span class="text-sm text-slate-600">React 18 + TypeScript</span>
+                        </div>
+                        <div class="flex items-center justify-between p-3 bg-slate-50 rounded-lg">
+                            <span class="font-medium">Backend</span>
+                            <span class="text-sm text-slate-600">Node.js + Express</span>
+                        </div>
+                        <div class="flex items-center justify-between p-3 bg-slate-50 rounded-lg">
+                            <span class="font-medium">Database</span>
+                            <span class="text-sm text-slate-600">PostgreSQL 15</span>
+                        </div>
+                        <div class="flex items-center justify-between p-3 bg-slate-50 rounded-lg">
+                            <span class="font-medium">Cache</span>
+                            <span class="text-sm text-slate-600">Redis Cluster</span>
+                        </div>
+                        <div class="flex items-center justify-between p-3 bg-slate-50 rounded-lg">
+                            <span class="font-medium">Cloud</span>
+                            <span class="text-sm text-slate-600">AWS (EKS, RDS, S3)</span>
+                        </div>
+                        <div class="flex items-center justify-between p-3 bg-slate-50 rounded-lg">
+                            <span class="font-medium">Auth</span>
+                            <span class="text-sm text-slate-600">OAuth 2.0 + JWT</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+
+        <!-- Footer -->
+        <footer class="bg-slate-800 text-slate-300 py-8 mt-12">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex flex-col md:flex-row justify-between items-center">
+                    <div class="mb-4 md:mb-0">
+                        <h4 class="font-bold text-white">TripFactory Development Hub</h4>
+                        <p class="text-sm text-slate-400">Technical Specification v2.2 | February 2026</p>
+                    </div>
+                    <div class="flex gap-4 text-sm">
+                        <span><i class="fas fa-envelope mr-2"></i>dev-team@tripfactory.com</span>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        // Login
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value.trim();
+            
+            if (username === 'TripFactory' && password === 'AKdev') {
+                document.getElementById('loginModal').style.display = 'none';
+                document.getElementById('mainApp').classList.remove('hidden');
+                localStorage.setItem('tfdev_auth', 'true');
+                document.getElementById('loginError').classList.add('hidden');
+            } else {
+                document.getElementById('loginError').classList.remove('hidden');
+            }
+        });
+
+        function logout() {
+            localStorage.removeItem('tfdev_auth');
+            location.reload();
+        }
+
+        window.addEventListener('DOMContentLoaded', function() {
+            if (localStorage.getItem('tfdev_auth') === 'true') {
+                document.getElementById('loginModal').style.display = 'none';
+                document.getElementById('mainApp').classList.remove('hidden');
+            }
+        });
+
+        function showSection(sectionId) {
+            document.querySelectorAll('main > section').forEach(section => {
+                section.classList.add('hidden');
+            });
+            
+            const selectedSection = document.getElementById(sectionId);
+            if (selectedSection) {
+                selectedSection.classList.remove('hidden');
+            }
+            
+            document.querySelectorAll('.nav-tab').forEach(tab => {
+                tab.classList.remove('tab-active');
+                tab.classList.add('text-slate-500');
+                if (tab.dataset.section === sectionId) {
+                    tab.classList.add('tab-active');
+                    tab.classList.remove('text-slate-500');
+                }
+            });
+        }
+
+        function openSprints() {
+            window.open('sprints.html', '_blank');
+        }
+
+        function openTeam() {
+            window.open('team.html', '_blank');
+        }
+
+        function exportDataSpecs() {
+            const data = {
+                exportDate: new Date().toISOString(),
+                dataEntities: 8,
+                totalRecords: "600K+"
+            };
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `tripfactory-data-specs-${new Date().toISOString().split('T')[0]}.json`;
+            a.click();
+        }
+    </script>
+</body>
+</html>
