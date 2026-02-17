@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project & Sprint Tracker - TripFactory Development</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { font-family: 'Inter', sans-serif; background: #f1f5f9; }
+        .gradient-text { background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .sprint-card { transition: all 0.3s ease; }
+        .sprint-card:hover { transform: translateY(-2px); box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1); }
+        .status-active { border-left: 4px solid #10b981; }
+        .status-planning { border-left: 4px solid #f59e0b; }
+        .status-completed { border-left: 4px solid #3b82f6; }
+        .status-blocked { border-left: 4px solid #ef4444; }
+        .progress-bar { transition: width 0.5s ease-out; }
+        .meeting-item { transition: background-color 0.2s; }
+        .meeting-item:hover { background-color: #f8fafc; }
+        .editable:focus { outline: 2px solid #3b82f6; background-color: #eff6ff; }
+    </style>
+</head>
+<body class="bg-slate-50 min-h-screen">
+    
+    <!-- Header -->
+    <header class="bg-white border-b border-slate-200 sticky top-0 z-40">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center gap-4">
+                    <div class="h-10 w-10 bg-blue-600 rounded-lg flex items-center justify-center text-white font-bold">TF</div>
+                    <div>
+                        <h1 class="text-xl font-bold text-slate-800">Project & Sprint Tracker</h1>
+                        <p class="text-xs text-slate-500">Development Workflow Management</p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-3">
+                    <button onclick="exportData()" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-sm font-medium transition flex items-center gap-2">
+                        <i class="fas fa-download"></i> Export
+                    </button>
+                    <button onclick="window.location.href='development-hub.html'" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm font-medium transition flex items-center gap-2">
+                        <i class="fas fa-arrow-left"></i> Back to Hub
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        
+        <!-- KPI Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm text-slate-500">Active Sprints</p>
+                        <p class="text-2xl font-bold text-slate-800" id="activeSprints">3</p>
+                    </div>
+                    <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
+                        <i class="fas fa-running text-green-600 text-xl"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm text-slate-500">Tasks In Progress</p>
+                        <p class="text-2xl font-bold text-slate-800" id="tasksProgress">24</p>
+                    </div>
+                    <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+                        <i class="fas fa-tasks text-blue-600 text-xl"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm text-slate-500">Completed This Week</p>
+                        <p class="text-2xl font-bold text-slate-800" id="completedWeek">18</p>
+                    </div>
+                    <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
+                        <i class="fas fa-check-circle text-purple-600 text-xl"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm text-slate-500">Blockers</p>
+                        <p class="text-2xl font-bold text-red-600" id="blockersCount">2</p>
+                    </div>
+                    <div class="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center">
+                        <i class="fas fa-exclamation-triangle text-red-600 text-xl"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            
+            <!-- Sprints Section -->
+            <div class="lg:col-span-2 space-y-6">
+                <div class="flex justify-between items-center">
+                    <h2 class="text-2xl font-bold gradient-text">Active Sprints</h2>
+                    <button onclick="addNewSprint()" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm font-medium transition flex items-center gap-2">
+                        <i class="fas fa-plus"></i> New Sprint
+                    </button>
+                </div>
+
+                <div id="sprintsContainer" class="space-y-4">
+                    <!-- Sprint 1 -->
+                    <div class="sprint-card bg-white rounded-xl shadow-sm border border-slate-200 p-6 status-active" data-sprint-id="1">
+                        <div class="flex justify-between items-start mb-4">
+                            <div>
+                                <div class="flex items-center gap-2 mb-1">
+                                    <span class="px-2 py-1 bg-green-100 text-green-700 text-xs font-semibold rounded">Active</span>
+                                    <span class="text-xs text-slate-500">Sprint 24</span>
+                                </div>
+                                <h3 class="text-lg font-bold text-slate-800 editable" contenteditable="true" onblur="saveSprint(1)">Capeye Workflow System</h3>
+                                <p class="text-sm text-slate-600 mt-1 editable" contenteditable="true" onblur="saveSprint(1)">Complete Stage 2-12 forms, staff actions, automation triggers</p>
+                            </div>
+                            <div class="flex gap-2">
+                                <button onclick="editSprint(1)" class="text-slate-400 hover:text-blue-600 transition"><i class="fas fa-edit"></i></button>
+                                <button onclick="deleteSprint(1)" class="text-slate-400 hover:text-red-600 transition"><i class="fas fa-trash"></i></button>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <div class="flex justify-between text-sm mb-1">
+                                <span class="text-slate-600">Progress</span>
+                                <span class="font-semibold text-slate-800">65%</span>
+                            </div>
+                            <div class="w-full bg-slate-200 rounded-full h-2">
+                                <div class="progress-bar bg-green-500 h-2 rounded-full" style="width: 65%"></div>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-4 gap-4 text-center mb-4">
+                            <div class="bg-slate-50 rounded p-2">
+                                <div class="text-lg font-bold text-slate-800">12</div>
+                                <div class="text-xs text-slate-500">Total</div>
+                            </div>
+                            <div class="bg-green-50 rounded p-2">
+                                <div class="text-lg font-bold text-green-700">8</div>
+                                <div class="text-xs text-green-600">Done</div>
+                            </div>
+                            <div class="bg-blue-50 rounded p-2">
+                                <div class="text-lg font-bold text-blue-700">3</div>
+                                <div class="text-xs text-blue-600">In Progress</div>
+                            </div>
+                            <div class="bg-slate-50 rounded p-2">
+                                <div class="text-lg font-bold text-slate-700">1</div>
+                                <div class="text-xs text-slate-500">To Do</div>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center justify-between text-sm">
+                            <div class="flex items-center gap-4">
+                                <span class="text-slate-500"><i class="far fa-calendar mr-1"></i> 17 Feb - 2 Mar 2026</span>
+                                <span class="text-slate-500"><i class="far fa-user mr-1"></i> Ajay Kawa</span>
+                            </div>
+                            <div class="flex -space-x-2">
+                                <div class="w-8 h-8 bg-blue-500 rounded-full border-2 border-white flex items-center justify-center text-white text-xs">AK</div>
+                                <div class="w-8 h-8 bg-green-500 rounded-full border-2 border-white flex items-center justify-center text-white text-xs">RK</div>
+                                <div class="w-8 h-8 bg-purple-500 rounded-full border-2 border-white flex items-center justify-center text-white text-xs">+2</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Sprint 2 -->
+                    <div class="sprint-card bg-white rounded-xl shadow-sm border border-slate-200 p-6 status-planning" data-sprint-id="2">
+                        <div class="flex justify-between items-start mb-4">
+                            <div>
+                                <div class="flex items-center gap-2 mb-1">
+                                    <span class="px-2 py-1 bg-amber-100 text-amber-700 text-xs font-semibold rounded">Planning</span>
+                                    <span class="text-xs text-slate-500">Sprint 25</span>
+                                </div>
+                                <h3 class="text-lg font-bold text-slate-800 editable" contenteditable="true" onblur="saveSprint(2)">Agent Intelligence Platform</h3>
+                                <p class="text-sm text-slate-600 mt-1 editable" contenteditable="true" onblur="saveSprint(2)">Segmentation algorithms, targeting engine, analytics dashboard</p>
+                            </div>
+                            <div class="flex gap-2">
+                                <button onclick="editSprint(2)" class="text-slate-400 hover:text-blue-600 transition"><i class="fas fa-edit"></i></button>
+                                <button onclick="deleteSprint(2)" class="text-slate-400 hover:text-red-600 transition"><i class="fas fa-trash"></i></button>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <div class="flex justify-between text-sm mb-1">
+                                <span class="text-slate-600">Progress</span>
+                                <span class="font-semibold text-slate-800">15%</span>
+                            </div>
+                            <div class="w-full bg-slate-200 rounded-full h-2">
+                                <div class="progress-bar bg-amber-500 h-2 rounded-full" style="width: 15%"></div>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-4 gap-4 text-center mb-4">
+                            <div class="bg-slate-50 rounded p-2">
+                                <div class="text-lg font-bold text-slate-800">20</div>
+                                <div class="text-xs text-slate-500">Total</div>
+                            </div>
+                            <div class="bg-green-50 rounded p-2">
+                                <div class="text-lg font-bold text-green-700">2</div>
+                                <div class="text-xs text-green-600">Done</div>
+                            </div>
+                            <div class="bg-blue-50 rounded p-2">
+                                <div class="text-lg font-bold text-blue-700">1</div>
+                                <div class="text-xs text-blue-600">In Progress</div>
+                            </div>
+                            <div class="bg-slate-50 rounded p-2">
+                                <div class="text-lg font-bold text-slate-700">17</div>
+                                <div class="text-xs text-slate-500">To Do</div>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center justify-between text-sm">
+                            <div class="flex items-center gap-4">
+                                <span class="text-slate-500"><i class="far fa-calendar mr-1"></i> 3 Mar - 16 Mar 2026</span>
+                                <span class="text-slate-500"><i class="far fa-user mr-1"></i> Unassigned</span>
+                            </div>
+                            <div class="flex -space-x-2">
+                                <div class="w-8 h-8 bg-slate-400 rounded-full border-2 border-white flex items-center justify-center text-white text-xs">TBD</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Sprint 3 -->
+                    <div class="sprint-card bg-white rounded-xl shadow-sm border border-slate-200 p-6 status-blocked" data-sprint-id="3">
+                        <div class="flex justify-between items-start mb-4">
+                            <div>
+                                <div class="flex items-center gap-2 mb-1">
+                                    <span class="px-2 py-1 bg-red-100 text-red-700 text-xs font-semibold rounded">Blocked</span>
+                                    <span class="text-xs text-slate-500">Sprint 23</span>
+                                </div>
+                                <h3 class="text-lg font-bold text-slate-800 editable" contenteditable="true" onblur="saveSprint(3)">Mobile App Deployment</h3>
+                                <p class="text-sm text-slate-600 mt-1 editable" contenteditable="true" onblur="saveSprint(3)">PWA configuration, app store submissions, push notifications</p>
+                            </div>
+                            <div class="flex gap-2">
+                                <button onclick="editSprint(3)" class="text-slate-400 hover:text-blue-600 transition"><i class="fas fa-edit"></i></button>
+                                <button onclick="deleteSprint(3)" class="text-slate-400 hover:text-red-600 transition"><i class="fas fa-trash"></i></button>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <div class="flex justify-between text-sm mb-1">
+                                <span class="text-slate-600">Progress</span>
+                                <span class="font-semibold text-slate-800">80%</span>
+                            </div>
+                            <div class="w-full bg-slate-200 rounded-full h-2">
+                                <div class="progress-bar bg-red-500 h-2 rounded-full" style="width: 80%"></div>
+                            </div>
+                        </div>
+
+                        <div class="bg-red-50 border border-red-200 rounded-lg p-3 mb-4">
+                            <div class="flex items-start gap-2">
+                                <i class="fas fa-exclamation-circle text-red-500 mt-1"></i>
+                                <div class="text-sm text-red-800">
+                                    <strong>Blocker:</strong> <span class="editable" contenteditable="true" onblur="saveSprint(3)">Waiting for Apple Developer account approval</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center justify-between text-sm">
+                            <div class="flex items-center gap-4">
+                                <span class="text-slate-500"><i class="far fa-calendar mr-1"></i> 3 Feb - 16 Feb 2026</span>
+                                <span class="text-slate-500"><i class="far fa-user mr-1"></i> Ajay Kawa</span>
+                            </div>
+                            <div class="flex -space-x-2">
+                                <div class="w-8 h-8 bg-blue-500 rounded-full border-2 border-white flex items-center justify-center text-white text-xs">AK</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Meeting Notes Section -->
+            <div class="space-y-6">
+                <div class="flex justify-between items-center">
+                    <h2 class="text-2xl font-bold gradient-text">Meeting Notes</h2>
+                    <button onclick="addNewMeeting()" class="px-3 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-sm transition">
+                        <i class="fas fa-plus"></i>
+                    </button>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-4">
+                    <div class="flex gap-2 mb-4">
+                        <button onclick="filterMeetings('all')" class="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-xs font-medium">All</button>
+                        <button onclick="filterMeetings('daily')" class="px-3 py-1 bg-slate-100 text-slate-600 rounded-full text-xs font-medium">Daily</button>
+                        <button onclick="filterMeetings('sprint')" class="px-3 py-1 bg-slate-100 text-slate-600 rounded-full text-xs font-medium">Sprint</button>
+                        <button onclick="filterMeetings('review')" class="px-3 py-1 bg-slate-100 text-slate-600 rounded-full text-xs font-medium">Review</button>
+                    </div>
+
+                    <div id="meetingsList" class="space-y-3 max-h-[600px] overflow-y-auto">
+                        <!-- Meeting 1 -->
+                        <div class="meeting-item border border-slate-200 rounded-lg p-4" data-meeting-id="1" data-type="daily">
+                            <div class="flex justify-between items-start mb-2">
+                                <span class="px-2 py-1 bg-blue-100 text-blue-700 text-xs rounded font-medium">Daily Standup</span>
+                                <span class="text-xs text-slate-500">Today, 09:30</span>
+                            </div>
+                            <h4 class="font-semibold text-slate-800 mb-2 editable" contenteditable="true" onblur="saveMeeting(1)">Capeye Workflow Review</h4>
+                            <ul class="text-sm text-slate-600 space-y-1 mb-3 editable" contenteditable="true" onblur="saveMeeting(1)">
+                                <li>• Stage 2 Bodywork form 80% complete</li>
+                                <li>• Staff assignment logic implemented</li>
+                                <li>• Blocker: Photo upload size limit</li>
+                            </ul>
+                            <div class="flex items-center justify-between">
+                                <div class="flex -space-x-2">
+                                    <div class="w-6 h-6 bg-blue-500 rounded-full border-2 border-white flex items-center justify-center text-white text-xs">AK</div>
+                                    <div class="w-6 h-6 bg-green-500 rounded-full border-2 border-white flex items-center justify-center text-white text-xs">RK</div>
+                                </div>
+                                <button onclick="deleteMeeting(1)" class="text-slate-400 hover:text-red-600 text-xs"><i class="fas fa-trash"></i></button>
+                            </div>
+                        </div>
+
+                        <!-- Meeting 2 -->
+                        <div class="meeting-item border border-slate-200 rounded-lg p-4" data-meeting-id="2" data-type="sprint">
+                            <div class="flex justify-between items-start mb-2">
+                                <span class="px-2 py-1 bg-purple-100 text-purple-700 text-xs rounded font-medium">Sprint Planning</span>
+                                <span class="text-xs text-slate-500">Yesterday, 14:00</span>
+                            </div>
+                            <h4 class="font-semibold text-slate-800 mb-2 editable" contenteditable="true" onblur="saveMeeting(2)">Sprint 25 Planning</h4>
+                            <ul class="text-sm text-slate-600 space-y-1 mb-3 editable" contenteditable="true" onblur="saveMeeting(2)">
+                                <li>• Agent Intelligence scope defined</li>
+                                <li>• 20 story points committed</li>
+                                <li>• Risk: Data engineer availability</li>
+                            </ul>
+                            <div class="flex items-center justify-between">
+                                <div class="flex -space-x-2">
+                                    <div class="w-6 h-6 bg-blue-500 rounded-full border-2 border-white flex items-center justify-center text-white text-xs">AK</div>
+                                    <div class="w-6 h-6 bg-purple-500 rounded-full border-2 border-white flex items-center justify-center text-white text-xs">TL</div>
+                                </div>
+                                <button onclick="deleteMeeting(2)" class="text-slate-400 hover:text-red-600 text-xs"><i class="fas fa-trash"></i></button>
+                            </div>
+                        </div>
+
+                        <!-- Meeting 3 -->
+                        <div class="meeting-item border border-slate-200 rounded-lg p-4" data-meeting-id="3" data-type="review">
+                            <div class="flex justify-between items-start mb-2">
+                                <span class="px-2 py-1 bg-green-100 text-green-700 text-xs rounded font-medium">Review</span>
+                                <span class="text-xs text-slate-500">15 Feb, 16:00</span>
+                            </div>
+                            <h4 class="font-semibold text-slate-800 mb-2 editable" contenteditable="true" onblur="saveMeeting(3)">Sprint 23 Review</h4>
+                            <ul class="text-sm text-slate-600 space-y-1 mb-3 editable" contenteditable="true" onblur="saveMeeting(3)">
+                                <li>• Mobile app PWA complete</li>
+                                <li>• 18/20 stories completed (90%)</li>
+                                <li>• Carry over: Push notifications</li>
+                            </ul>
+                            <div class="flex items-center justify-between">
+                                <div class="flex -space-x-2">
+                                    <div class="w-6 h-6 bg-blue-500 rounded-full border-2 border-white flex items-center justify-center text-white text-xs">AK</div>
+                                    <div class="w-6 h-6 bg-green-500 rounded-full border-2 border-white flex items-center justify-center text-white text-xs">RK</div>
+                                    <div class="w-6 h-6 bg-orange-500 rounded-full border-2 border-white flex items-center justify-center text-white text-xs">ST</div>
+                                </div>
+                                <button onclick="deleteMeeting(3)" class="text-slate-400 hover:text-red-600 text-xs"><i class="fas fa-trash"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="bg-gradient-to-br from-slate-800 to-slate-900 rounded-xl p-6 text-white">
+                    <h3 class="font-bold mb-4">Quick Actions</h3>
+                    <div class="space-y-2">
+                        <button onclick="addNewSprint()" class="w-full text-left px-4 py-3 bg-white/10 hover:bg-white/20 rounded-lg transition flex items-center gap-3">
+                            <i class="fas fa-plus-circle"></i>
+                            <span>Create New Sprint</span>
+                        </button>
+                        <button onclick="addNewMeeting()" class="w-full text-left px-4 py-3 bg-white/10 hover:bg-white/20 rounded-lg transition flex items-center gap-3">
+                            <i class="fas fa-sticky-note"></i>
+                            <span>Add Meeting Notes</span>
+                        </button>
+                        <button onclick="exportData()" class="w-full text-left px-4 py-3 bg-white/10 hover:bg-white/20 rounded-lg transition flex items-center gap-3">
+                            <i class="fas fa-file-export"></i>
+                            <span>Export Report</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Data Management
+        let sprints = JSON.parse(localStorage.getItem('tf_sprints')) || [];
+        let meetings = JSON.parse(localStorage.getItem('tf_meetings')) || [];
+
+        // Initialize with default data if empty
+        if (sprints.length === 0) {
+            sprints = [
+                { id: 1, status: 'active', name: 'Capeye Workflow System', progress: 65 },
+                { id: 2, status: 'planning', name: 'Agent Intelligence Platform', progress: 15 },
+                { id: 3, status: 'blocked', name: 'Mobile App Deployment', progress: 80 }
+            ];
+            localStorage.setItem('tf_sprints', JSON.stringify(sprints));
+        }
+
+        // Save functions
+        function saveSprint(id) {
+            const card = document.querySelector(`[data-sprint-id="${id}"]`);
+            const sprint = sprints.find(s => s.id === id);
+            if (sprint && card) {
+                sprint.name = card.querySelector('h3').innerText;
+                sprint.description = card.querySelector('p').innerText;
+                localStorage.setItem('tf_sprints', JSON.stringify(sprints));
+                showNotification('Sprint saved', 'success');
+            }
+        }
+
+        function saveMeeting(id) {
+            const card = document.querySelector(`[data-meeting-id="${id}"]`);
+            const meeting = meetings.find(m => m.id === id);
+            if (meeting && card) {
+                meeting.title = card.querySelector('h4').innerText;
+                meeting.notes = card.querySelector('ul').innerText;
+                localStorage.setItem('tf_meetings', JSON.stringify(meetings));
+                showNotification('Meeting notes saved', 'success');
+            }
+        }
+
+        function addNewSprint() {
+            const id = Date.now();
+            const newSprint = {
+                id: id,
+                status: 'planning',
+                name: 'New Sprint',
+                description: 'Click to edit description',
+                progress: 0
+            };
+            sprints.push(newSprint);
+            localStorage.setItem('tf_sprints', JSON.stringify(sprints));
+            location.reload();
+        }
+
+        function addNewMeeting() {
+            const id = Date.now();
+            const newMeeting = {
+                id: id,
+                type: 'daily',
+                title: 'New Meeting',
+                notes: '• Add notes here',
+                date: new Date().toLocaleDateString()
+            };
+            meetings.push(newMeeting);
+            localStorage.setItem('tf_meetings', JSON.stringify(meetings));
+            location.reload();
+        }
+
+        function deleteSprint(id) {
+            if (confirm('Delete this sprint?')) {
+                sprints = sprints.filter(s => s.id !== id);
+                localStorage.setItem('tf_sprints', JSON.stringify(sprints));
+                document.querySelector(`[data-sprint-id="${id}"]`).remove();
+                updateStats();
+            }
+        }
+
+        function deleteMeeting(id) {
+            if (confirm('Delete this meeting?')) {
+                meetings = meetings.filter(m => m.id !== id);
+                localStorage.setItem('tf_meetings', JSON.stringify(meetings));
+                document.querySelector(`[data-meeting-id="${id}"]`).remove();
+            }
+        }
+
+        function filterMeetings(type) {
+            const items = document.querySelectorAll('#meetingsList > div');
+            items.forEach(item => {
+                if (type === 'all' || item.dataset.type === type) {
+                    item.style.display = 'block';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        }
+
+        function updateStats() {
+            document.getElementById('activeSprints').textContent = sprints.filter(s => s.status === 'active').length;
+        }
+
+        function exportData() {
+            const data = {
+                sprints: sprints,
+                meetings: meetings,
+                exportDate: new Date().toISOString()
+            };
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `tripfactory-sprints-${new Date().toISOString().split('T')[0]}.json`;
+            a.click();
+            showNotification('Data exported successfully', 'success');
+        }
+
+        function showNotification(message, type) {
+            // Simple notification implementation
+            const div = document.createElement('div');
+            div.className = `fixed bottom-4 right-4 px-6 py-3 rounded-lg text-white ${type === 'success' ? 'bg-green-600' : 'bg-blue-600'} shadow-lg z-50`;
+            div.textContent = message;
+            document.body.appendChild(div);
+            setTimeout(() => div.remove(), 3000);
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            updateStats();
+        });
+    </script>
+</body>
+</html>
