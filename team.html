@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Development Team - TripFactory</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { font-family: 'Inter', sans-serif; background: #f1f5f9; }
+        .gradient-text { background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .team-card { transition: all 0.3s ease; }
+        .team-card:hover { transform: translateY(-4px); box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1); }
+        .skill-tag { transition: all 0.2s; }
+        .skill-tag:hover { transform: scale(1.05); }
+        .editable-field { 
+            border: 1px solid transparent; 
+            border-radius: 4px; 
+            padding: 2px 6px; 
+            transition: all 0.2s;
+        }
+        .editable-field:hover { 
+            border-color: #cbd5e1; 
+            background-color: #f8fafc; 
+        }
+        .editable-field:focus { 
+            outline: 2px solid #3b82f6; 
+            background-color: #eff6ff; 
+            border-color: #3b82f6;
+        }
+        .section-badge { display: inline-flex; align-items: center; gap: 4px; }
+    </style>
+</head>
+<body class="bg-slate-50 min-h-screen">
+    
+    <!-- Header -->
+    <header class="bg-white border-b border-slate-200 sticky top-0 z-40">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center gap-4">
+                    <div class="h-10 w-10 bg-blue-600 rounded-lg flex items-center justify-center text-white font-bold">TF</div>
+                    <div>
+                        <h1 class="text-xl font-bold text-slate-800">Development Team</h1>
+                        <p class="text-xs text-slate-500">Team Management & Skills Matrix</p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-3">
+                    <div class="relative">
+                        <input type="text" id="searchTeam" placeholder="Search team..." 
+                               class="pl-10 pr-4 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none w-64"
+                               onkeyup="searchTeam()">
+                        <i class="fas fa-search absolute left-3 top-2.5 text-slate-400"></i>
+                    </div>
+                    <button onclick="exportTeamData()" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-sm font-medium transition flex items-center gap-2">
+                        <i class="fas fa-download"></i> Export
+                    </button>
+                    <button onclick="window.location.href='development-hub.html'" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm font-medium transition flex items-center gap-2">
+                        <i class="fas fa-arrow-left"></i> Back to Hub
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        
+        <!-- Team Stats -->
+        <div class="grid grid-cols-1 md:grid-cols-5 gap-4 mb-8">
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
+                <div class="text-3xl font-bold text-slate-800" id="totalMembers">7</div>
+                <div class="text-sm text-slate-500">Team Members</div>
+            </div>
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
+                <div class="text-3xl font-bold text-blue-600" id="frontendCount">2</div>
+                <div class="text-sm text-slate-500">Frontend</div>
+            </div>
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
+                <div class="text-3xl font-bold text-green-600" id="backendCount">2</div>
+                <div class="text-sm text-slate-500">Backend</div>
+            </div>
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
+                <div class="text-3xl font-bold text-purple-600" id="fullstackCount">2</div>
+                <div class="text-sm text-slate-500">Full Stack</div>
+            </div>
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
+                <div class="text-3xl font-bold text-orange-600" id="otherCount">1</div>
+                <div class="text-sm text-slate-500">Data/DevOps</div>
+            </div>
+        </div>
+
+        <!-- Filter Tabs -->
+        <div class="flex gap-2 mb-6 overflow-x-auto pb-2">
+            <button onclick="filterTeam('all')" class="filter-btn px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium transition" data-filter="all">All Team</button>
+            <button onclick="filterTeam('frontend')" class="filter-btn px-4 py-2 bg-white text-slate-600 border border-slate-300 rounded-lg text-sm font-medium hover:bg-slate-50 transition" data-filter="frontend">Frontend</button>
+            <button onclick="filterTeam('backend')" class="filter-btn px-4 py-2 bg-white text-slate-600 border border-slate-300 rounded-lg text-sm font-medium hover:bg-slate-50 transition" data-filter="backend">Backend</button>
+            <button onclick="filterTeam('fullstack')" class="filter-btn px-4 py-2 bg-white text-slate-600 border border-slate-300 rounded-lg text-sm font-medium hover:bg-slate-50 transition" data-filter="fullstack">Full Stack</button>
+            <button onclick="filterTeam('data')" class="filter-btn px-4 py-2 bg-white text-slate-600 border border-slate-300 rounded-lg text-sm font-medium hover:bg-slate-50 transition" data-filter="data">Data/DevOps</button>
+        </div>
+
+        <!-- Team Grid -->
+        <div id="teamGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Team Member 1 -->
+            <div class="team-card bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden" data-section="fullstack" data-member-id="1">
+                <div class="h-24 bg-gradient-to-r from-blue-600 to-indigo-600 relative">
+                    <div class="absolute -bottom-10 left-6">
+                        <div class="w-20 h-20 bg-white rounded-full border-4 border-white flex items-center justify-center text-2xl font-bold text-blue-600 shadow-md">
+                            AK
+                        </div>
+                    </div>
+                    <div class="absolute top-4 right-4 flex gap-2">
+                        <button onclick="saveMember(1)" class="w-8 h-8 bg-white/20 hover:bg-white/30 rounded-full flex items-center justify-center text-white transition" title="Save">
+                            <i class="fas fa-save text-sm"></i>
+                        </button>
+                        <button onclick="deleteMember(1)" class="w-8 h-8 bg-white/20 hover:bg-red-500/80 rounded-full flex items-center justify-center text-white transition" title="Delete">
+                            <i class="fas fa-trash text-sm"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="pt-12 pb-6 px-6">
+                    <div class="mb-4">
+                        <h3 class="text-xl font-bold text-slate-800 editable-field" contenteditable="true">Ajay Kawa</h3>
+                        <p class="text-blue-600 font-medium editable-field" contenteditable="true">Tech Lead / Full Stack</p>
+                    </div>
+
+                    <div class="space-y-3 mb-4">
+                        <div class="flex items-center gap-3 text-sm">
+                            <i class="fas fa-envelope text-slate-400 w-5"></i>
+                            <span class="editable-field flex-1" contenteditable="true">ajay.kawa@tripfactory.com</span>
+                        </div>
+                        <div class="flex items-center gap-3 text-sm">
+                            <i class="fas fa-phone text-slate-400 w-5"></i>
+                            <span class="editable-field flex-1" contenteditable="true">+44 7700 900123</span>
+                        </div>
+                        <div class="flex items-center gap-3 text-sm">
+                            <i class="fas fa-user-tie text-slate-400 w-5"></i>
+                            <span class="text-slate-600">Reports to: </span>
+                            <span class="editable-field flex-1 font-medium" contenteditable="true">Raj Kumar (COO)</span>
+                        </div>
+                        <div class="flex items-center gap-3 text-sm">
+                            <i class="fas fa-map-marker-alt text-slate-400 w-5"></i>
+                            <span class="editable-field flex-1" contenteditable="true">London, UK (Remote)</span>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <h4 class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Skills</h4>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="skill-tag px-2 py-1 bg-blue-100 text-blue-700 text-xs rounded-full cursor-pointer" onclick="removeSkill(this)">React</span>
+                            <span class="skill-tag px-2 py-1 bg-green-100 text-green-700 text-xs rounded-full cursor-pointer" onclick="removeSkill(this)">Node.js</span>
+                            <span class="skill-tag px-2 py-1 bg-purple-100 text-purple-700 text-xs rounded-full cursor-pointer" onclick="removeSkill(this)">System Design</span>
+                            <span class="skill-tag px-2 py-1 bg-orange-100 text-orange-700 text-xs rounded-full cursor-pointer" onclick="removeSkill(this)">AWS</span>
+                            <button onclick="addSkill(1)" class="skill-tag px-2 py-1 bg-slate-100 text-slate-600 text-xs rounded-full hover:bg-slate-200">
+                                <i class="fas fa-plus"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <h4 class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Current Projects</h4>
+                        <div class="editable-field text-sm text-slate-600 min-h-[60px]" contenteditable="true">
+                            • Capeye Workflow System (Lead)<br>
+                            • Development Hub Architecture<br>
+                            • Mobile App Strategy
+                        </div>
+                    </div>
+
+                    <div class="flex items-center justify-between pt-4 border-t border-slate-200">
+                        <div class="flex items-center gap-2">
+                            <span class="w-2 h-2 bg-green-500 rounded-full"></span>
+                            <span class="text-xs text-slate-500">Active</span>
+                        </div>
+                        <span class="text-xs text-slate-400">Updated: Today</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Team Member 2 -->
+            <div class="team-card bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden" data-section="frontend" data-member-id="2">
+                <div class="h-24 bg-gradient-to-r from-green-600 to-emerald-600 relative">
+                    <div class="absolute -bottom-10 left-6">
+                        <div class="w-20 h-20 bg-white rounded-full border-4 border-white flex items-center justify-center text-2xl font-bold text-green-600 shadow-md">
+                            SK
+                        </div>
+                    </div>
+                    <div class="absolute top-4 right-4 flex gap-2">
+                        <button onclick="saveMember(2)" class="w-8 h-8 bg-white/20 hover:bg-white/30 rounded-full flex items-center justify-center text-white transition">
+                            <i class="fas fa-save text-sm"></i>
+                        </button>
+                        <button onclick="deleteMember(2)" class="w-8 h-8 bg-white/20 hover:bg-red-500/80 rounded-full flex items-center justify-center text-white transition">
+                            <i class="fas fa-trash text-sm"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="pt-12 pb-6 px-6">
+                    <div class="mb-4">
+                        <h3 class="text-xl font-bold text-slate-800 editable-field" contenteditable="true">Sarah Kumar</h3>
+                        <p class="text-green-600 font-medium editable-field" contenteditable="true">Senior Frontend Developer</p>
+                    </div>
+
+                    <div class="space-y-3 mb-4">
+                        <div class="flex items-center gap-3 text-sm">
+                            <i class="fas fa-envelope text-slate-400 w-5"></i>
+                            <span class="editable-field flex-1" contenteditable="true">sarah.kumar@tripfactory.com</span>
+                        </div>
+                        <div class="flex items-center gap-3 text-sm">
+                            <i class="fas fa-phone text-slate-400 w-5"></i>
+                            <span class="editable-field flex-1" contenteditable="true">+91 98765 43210</span>
+                        </div>
+                        <div class="flex items-center gap-3 text-sm">
+                            <i class="fas fa-user-tie text-slate-400 w-5"></i>
+                            <span class="text-slate-600">Reports to: </span>
+                            <span class="editable-field flex-1 font-medium" contenteditable="true">Ajay Kawa</span>
+                        </div>
+                        <div class="flex items-center gap-3 text-sm">
+                            <i class="fas fa-map-marker-alt text-slate-400 w-5"></i>
+                            <span class="editable-field flex-1" contenteditable="true">Delhi, India</span>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <h4 class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Skills</h4>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="skill-tag px-2 py-1 bg-blue-100 text-blue-700 text-xs rounded-full cursor-pointer" onclick="removeSkill(this)">React</span>
+                            <span class="skill-tag px-2 py-1 bg-cyan-100 text-cyan-700 text-xs rounded-full cursor-pointer" onclick="removeSkill(this)">Vue.js</span>
+                            <span class="skill-tag px-2 py-1 bg-sky-100 text-sky-700 text-xs rounded-full cursor-pointer" onclick="removeSkill(this)">Tailwind</span>
+                            <span class="skill-tag px-2 py-1 bg-yellow-100 text-yellow-700 text-xs rounded-full cursor-pointer" onclick="removeSkill(this)">D3.js</span>
+                            <button onclick="addSkill(2)" class="skill-tag px-2 py-1 bg-slate-100 text-slate-600 text-xs rounded-full hover:bg-slate-200">
+                                <i class="fas fa-plus"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <h4 class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Current Projects</h4>
+                        <div class="editable-field text-sm text-slate-600 min-h-[60px]" contenteditable="true">
+                            • Agent Intelligence Dashboard<br>
+                            • Chart.js Visualisations<br>
+                            • Responsive UI Components
+                        </div>
+                    </div>
+
+                    <div class="flex items-center justify-between pt-4 border-t border-slate-200">
+                        <div class="flex items-center gap-2">
+                            <span class="w-2 h-2 bg-green-500 rounded-full"></span>
+                            <span class="text-xs text-slate-500">Active</span>
+                        </div>
+                        <span class="text-xs text-slate-400">Updated: Yesterday</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Team Member 3 -->
+            <div class="team-card bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden" data-section="backend" data-member-id="3">
+                <div class="h-24 bg-gradient-to-r from-purple-600 to-violet-600 relative">
+                    <div class="absolute -bottom-10 left-6">
+                        <div class="w-20 h-20 bg-white rounded-full border-4 border-white flex items-center justify-center text-2xl font-bold text-purple-600 shadow-md">
+                            RP
+                        </div>
+                    </div>
+                    <div class="absolute top-4 right-4 flex gap-2">
+                        <button onclick="saveMember(3)" class="w-8 h-8 bg-white/20 hover:bg-white/30 rounded-full flex items-center justify-center text-white transition">
+                            <i class="fas fa-save text-sm"></i>
+                        </button>
+                        <button onclick="deleteMember(3)" class="w-8 h-8 bg-white/20 hover:bg-red-500/80 rounded-full flex items-center justify-center text-white transition">
+                            <i class="fas fa-trash text-sm"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="pt-12 pb-6 px-6">
+                    <div class="mb-4">
+                        <h3 class="text-xl font-bold text-slate-800 editable-field" contenteditable="true">Raj Patel</h3>
+                        <p class="text-purple-600 font-medium editable-field" contenteditable="true">Senior Backend Developer</p>
+                    </div>
+
+                    <div class="space-y-3 mb-4">
+                        <div class="flex items-center gap-3 text-sm">
+                            <i class="fas fa-envelope text-slate-400 w-5"></i>
+                            <span class="editable-field flex-1" contenteditable="true">raj.patel@tripfactory.com</span>
+                        </div>
+                        <div class="flex items-center gap-3 text-sm">
+                            <i class="fas fa-phone text-slate-400 w-5"></i>
+                            <span class="editable-field flex-1" contenteditable="true">+91 98765 43211</span>
+                        </div>
+                        <div class="flex items-center gap-3 text-sm">
+                            <i class="fas fa-user-tie text-slate-400 w-5"></i>
+                            <span class="text-slate-600">Reports to: </span>
+                            <span class="editable-field flex-1 font-medium" contenteditable="true">Ajay Kawa</span>
+                        </div>
+                        <div class="flex items-center gap-3 text-sm">
+                            <i class="fas fa-map-marker-alt text-slate-400 w-5"></i>
+                            <span class="editable-field flex-1" contenteditable="true">Mumbai, India</span>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <h4 class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Skills</h4>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="skill-tag px-2 py-1 bg-green-100 text-green-700 text-xs rounded-full cursor-pointer" onclick="removeSkill(this)">Node.js</span>
+                            <span class="skill-tag px-2 py-1 bg-blue-100 text-blue-700 text-xs rounded-full cursor-pointer" onclick="removeSkill(this)">PostgreSQL</span>
+                            <span class="skill-tag px-2 py-1 bg-yellow-100 text-yellow-700 text-xs rounded-full cursor-pointer" onclick="removeSkill(this)">Redis</span>
+                            <span class="skill-tag px-2 py-1 bg-orange-100 text-orange-700 text-xs rounded-full cursor-pointer" onclick="removeSkill(this)">AWS</span>
+                            <button onclick="addSkill(3)" class="skill-tag px-2 py-1 bg-slate-100 text-slate-600 text-xs rounded-full hover:bg-slate-200">
+                                <i class="fas fa-plus"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <h4 class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Current Projects</h4>
+                        <div class="editable-field text-sm text-slate-600 min-h-[60px]" contenteditable="true">
+                            • API Gateway Development<br>
+                            • Database Optimisation<br>
+                            • Authentication Service
+                        </div>
+                    </div>
+
+                    <div class="flex items-center justify-between pt-4 border-t border-slate-200">
+                        <div class="flex items-center gap-2">
+                            <span class="w-2 h-2 bg-yellow-500 rounded-full"></span>
+                            <span class="text-xs text-slate-500">On Leave</span>
+                        </div>
+                        <span class="text-xs text-slate-400">Updated: 2 days ago</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Add New Member Card -->
+            <div onclick="addNewMember()" class="team-card bg-slate-50 rounded-xl shadow-sm border-2 border-dashed border-slate-300 overflow-hidden cursor-pointer hover:border-blue-400 hover:bg-slate-100 transition flex items-center justify-center min-h-[500px]">
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-slate-200 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-plus text-2xl text-slate-400"></i>
+                    </div>
+                    <h3 class="text-lg font-semibold text-slate-600">Add Team Member</h3>
+                    <p class="text-sm text-slate-400 mt-1">Click to create new profile</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Skills Matrix Summary -->
+        <div class="mt-12 bg-white rounded-xl shadow-sm border border-slate-200 p-6">
+            <h2 class="text-xl font-bold gradient-text mb-6">Skills Matrix Overview</h2>
+            <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
+                <div class="text-center p-4 bg-blue-50 rounded-lg">
+                    <div class="text-2xl font-bold text-blue-700 mb-1">5</div>
+                    <div class="text-xs text-blue-600">React/Vue</div>
+                </div>
+                <div class="text-center p-4 bg-green-50 rounded-lg">
+                    <div class="text-2xl font-bold text-green-700 mb-1">4</div>
+                    <div class="text-xs text-green-600">Node.js</div>
+                </div>
+                <div class="text-center p-4 bg-purple-50 rounded-lg">
+                    <div class="text-2xl font-bold text-purple-700 mb-1">3</div>
+                    <div class="text-xs text-purple-600">PostgreSQL</div>
+                </div>
+                <div class="text-center p-4 bg-orange-50 rounded-lg">
+                    <div class="text-2xl font-bold text-orange-700 mb-1">4</div>
+                    <div class="text-xs text-orange-600">AWS/Azure</div>
+                </div>
+                <div class="text-center p-4 bg-cyan-50 rounded-lg">
+                    <div class="text-2xl font-bold text-cyan-700 mb-1">3</div>
+                    <div class="text-xs text-cyan-600">Mobile/PWA</div>
+                </div>
+                <div class="text-center p-4 bg-pink-50 rounded-lg">
+                    <div class="text-2xl font-bold text-pink-700 mb-1">2</div>
+                    <div class="text-xs text-pink-600">Data/Analytics</div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Data Management
+        let teamMembers = JSON.parse(localStorage.getItem('tf_team')) || [];
+        let nextId = 4;
+
+        // Initialize default data if empty
+        if (teamMembers.length === 0) {
+            teamMembers = [
+                { id: 1, name: 'Ajay Kawa', section: 'fullstack', initials: 'AK' },
+                { id: 2, name: 'Sarah Kumar', section: 'frontend', initials: 'SK' },
+                { id: 3, name: 'Raj Patel', section: 'backend', initials: 'RP' }
+            ];
+            localStorage.setItem('tf_team', JSON.stringify(teamMembers));
+        }
+
+        function saveMember(id) {
+            const card = document.querySelector(`[data-member-id="${id}"]`);
+            const member = teamMembers.find(m => m.id === id);
+            
+            if (card && member) {
+                // Save all editable fields
+                const fields = card.querySelectorAll('.editable-field');
+                member.name = fields[0].innerText;
+                member.role = fields[1].innerText;
+                member.email = fields[2].innerText;
+                member.phone = fields[3].innerText;
+                member.reportsTo = fields[4].innerText;
+                member.location = fields[5].innerText;
+                member.projects = fields[6].innerText;
+                
+                // Save skills
+                const skills = [];
+                card.querySelectorAll('.skill-tag:not(button)').forEach(tag => {
+                    skills.push(tag.innerText);
+                });
+                member.skills = skills;
+                
+                localStorage.setItem('tf_team', JSON.stringify(teamMembers));
+                showNotification('Team member saved successfully', 'success');
+                
+                // Update timestamp
+                card.querySelector('.text-xs.text-slate-400').textContent = 'Updated: Just now';
+            }
+        }
+
+        function addNewMember() {
+            const id = nextId++;
+            const newMember = {
+                id: id,
+                name: 'New Member',
+                section: 'frontend',
+                initials: 'NM',
+                role: 'Developer',
+                email: 'new.member@tripfactory.com',
+                phone: '+44 0000 000000',
+                reportsTo: 'Ajay Kawa',
+                location: 'Location',
+                projects: '• Project 1\n• Project 2',
+                skills: ['JavaScript', 'HTML']
+            };
+            
+            teamMembers.push(newMember);
+            localStorage.setItem('tf_team', JSON.stringify(teamMembers));
+            
+            // Create new card HTML
+            const card = createMemberCard(newMember);
+            const grid = document.getElementById('teamGrid');
+            const addButton = grid.lastElementChild;
+            grid.insertBefore(card, addButton);
+            
+            showNotification('New team member added', 'success');
+            updateStats();
+        }
+
+        function createMemberCard(member) {
+            const div = document.createElement('div');
+            div.className = 'team-card bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden';
+            div.setAttribute('data-section', member.section);
+            div.setAttribute('data-member-id', member.id);
+            
+            const colors = {
+                frontend: 'from-green-600 to-emerald-600',
+                backend: 'from-purple-600 to-violet-600',
+                fullstack: 'from-blue-600 to-indigo-600',
+                data: 'from-orange-600 to-amber-600'
+            };
+            
+            const color = colors[member.section] || colors.frontend;
+            
+            div.innerHTML = `
+                <div class="h-24 bg-gradient-to-r ${color} relative">
+                    <div class="absolute -bottom-10 left-6">
+                        <div class="w-20 h-20 bg-white rounded-full border-4 border-white flex items-center justify-center text-2xl font-bold text-slate-600 shadow-md">
+                            ${member.initials}
+                        </div>
+                    </div>
+                    <div class="absolute top-4 right-4 flex gap-2">
+                        <button onclick="saveMember(${member.id})" class="w-8 h-8 bg-white/20 hover:bg-white/30 rounded-full flex items-center justify-center text-white transition">
+                            <i class="fas fa-save text-sm"></i>
+                        </button>
+                        <button onclick="deleteMember(${member.id})" class="w-8 h-8 bg-white/20 hover:bg-red-500/80 rounded-full flex items-center justify-center text-white transition">
+                            <i class="fas fa-trash text-sm"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="pt-12 pb-6 px-6">
+                    <div class="mb-4">
+                        <h3 class="text-xl font-bold text-slate-800 editable-field" contenteditable="true">${member.name}</h3>
+                        <p class="text-slate-600 font-medium editable-field" contenteditable="true">${member.role || 'Developer'}</p>
+                    </div>
+                    <div class="space-y-3 mb-4">
+                        <div class="flex items-center gap-3 text-sm">
+                            <i class="fas fa-envelope text-slate-400 w-5"></i>
+                            <span class="editable-field flex-1" contenteditable="true">${member.email}</span>
+                        </div>
+                        <div class="flex items-center gap-3 text-sm">
+                            <i class="fas fa-phone text-slate-400 w-5"></i>
+                            <span class="editable-field flex-1" contenteditable="true">${member.phone}</span>
+                        </div>
+                        <div class="flex items-center gap-3 text-sm">
+                            <i class="fas fa-user-tie text-slate-400 w-5"></i>
+                            <span class="text-slate-600">Reports to: </span>
+                            <span class="editable-field flex-1 font-medium" contenteditable="true">${member.reportsTo}</span>
+                        </div>
+                        <div class="flex items-center gap-3 text-sm">
+                            <i class="fas fa-map-marker-alt text-slate-400 w-5"></i>
+                            <span class="editable-field flex-1" contenteditable="true">${member.location}</span>
+                        </div>
+                    </div>
+                    <div class="mb-4">
+                        <h4 class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Skills</h4>
+                        <div class="flex flex-wrap gap-2">
+                            ${(member.skills || []).map(skill => `
+                                <span class="skill-tag px-2 py-1 bg-blue-100 text-blue-700 text-xs rounded-full cursor-pointer" onclick="removeSkill(this)">${skill}</span>
+                            `).join('')}
+                            <button onclick="addSkill(${member.id})" class="skill-tag px-2 py-1 bg-slate-100 text-slate-600 text-xs rounded-full hover:bg-slate-200">
+                                <i class="fas fa-plus"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="mb-4">
+                        <h4 class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Current Projects</h4>
+                        <div class="editable-field text-sm text-slate-600 min-h-[60px]" contenteditable="true">${member.projects}</div>
+                    </div>
+                    <div class="flex items-center justify-between pt-4 border-t border-slate-200">
+                        <div class="flex items-center gap-2">
+                            <span class="w-2 h-2 bg-green-500 rounded-full"></span>
+                            <span class="text-xs text-slate-500">Active</span>
+                        </div>
+                        <span class="text-xs text-slate-400">Updated: Just now</span>
+                    </div>
+                </div>
+            `;
+            
+            return div;
+        }
+
+        function deleteMember(id) {
+            if (confirm('Are you sure you want to remove this team member?')) {
+                teamMembers = teamMembers.filter(m => m.id !== id);
+                localStorage.setItem('tf_team', JSON.stringify(teamMembers));
+                document.querySelector(`[data-member-id="${id}"]`).remove();
+                updateStats();
+                showNotification('Team member removed', 'success');
+            }
+        }
+
+        function addSkill(memberId) {
+            const skill = prompt('Enter new skill:');
+            if (skill) {
+                const card = document.querySelector(`[data-member-id="${memberId}"]`);
+                const skillsContainer = card.querySelector('.flex.flex-wrap.gap-2');
+                const newSkill = document.createElement('span');
+                newSkill.className = 'skill-tag px-2 py-1 bg-blue-100 text-blue-700 text-xs rounded-full cursor-pointer';
+                newSkill.onclick = function() { removeSkill(this); };
+                newSkill.textContent = skill;
+                skillsContainer.insertBefore(newSkill, skillsContainer.lastElementChild);
+                saveMember(memberId);
+            }
+        }
+
+        function removeSkill(element) {
+            if (confirm('Remove this skill?')) {
+                element.remove();
+                // Find parent member card and save
+                const card = element.closest('[data-member-id]');
+                if (card) {
+                    const id = card.getAttribute('data-member-id');
+                    saveMember(parseInt(id));
+                }
+            }
+        }
+
+        function filterTeam(section) {
+            // Update buttons
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                if (btn.dataset.filter === section) {
+                    btn.className = 'filter-btn px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium transition';
+                } else {
+                    btn.className = 'filter-btn px-4 py-2 bg-white text-slate-600 border border-slate-300 rounded-lg text-sm font-medium hover:bg-slate-50 transition';
+                }
+            });
+            
+            // Filter cards
+            const cards = document.querySelectorAll('#teamGrid > div:not(:last-child)');
+            cards.forEach(card => {
+                if (section === 'all' || card.dataset.section === section) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        function searchTeam() {
+            const query = document.getElementById('searchTeam').value.toLowerCase();
+            const cards = document.querySelectorAll('#teamGrid > div:not(:last-child)');
+            
+            cards.forEach(card => {
+                const text = card.innerText.toLowerCase();
+                if (text.includes(query)) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        function updateStats() {
+            const sections = { frontend: 0, backend: 0, fullstack: 0, data: 0 };
+            document.querySelectorAll('#teamGrid > div:not(:last-child)').forEach(card => {
+                const section = card.dataset.section;
+                if (sections[section] !== undefined) sections[section]++;
+            });
+            
+            document.getElementById('totalMembers').textContent = Object.values(sections).reduce((a, b) => a + b, 0);
+            document.getElementById('frontendCount').textContent = sections.frontend;
+            document.getElementById('backendCount').textContent = sections.backend;
+            document.getElementById('fullstackCount').textContent = sections.fullstack;
+            document.getElementById('otherCount').textContent = sections.data;
+        }
+
+        function exportTeamData() {
+            const data = {
+                team: teamMembers,
+                exportDate: new Date().toISOString(),
+                totalMembers: teamMembers.length
+            };
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `tripfactory-team-${new Date().toISOString().split('T')[0]}.json`;
+            a.click();
+            showNotification('Team data exported', 'success');
+        }
+
+        function showNotification(message, type) {
+            const div = document.createElement('div');
+            div.className = `fixed bottom-4 right-4 px-6 py-3 rounded-lg text-white ${type === 'success' ? 'bg-green-600' : 'bg-blue-600'} shadow-lg z-50 flex items-center gap-2`;
+            div.innerHTML = `<i class="fas fa-check-circle"></i> ${message}`;
+            document.body.appendChild(div);
+            setTimeout(() => div.remove(), 3000);
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            updateStats();
+        });
+    </script>
+</body>
+</html>
