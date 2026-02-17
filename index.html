@@ -32,8 +32,7 @@
     <div id="loginModal" class="fixed inset-0 bg-slate-900/80 backdrop-blur-sm z-50 flex items-center justify-center">
         <div class="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md mx-4">
             <div class="text-center mb-8">
-                <img src="tripfactory-logo.png" alt="TripFactory" class="h-16 mx-auto mb-4" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
-                <div class="hidden h-16 w-16 bg-blue-600 rounded-xl mx-auto mb-4 flex items-center justify-center text-white text-2xl font-bold">TF</div>
+                <div class="h-16 w-16 bg-blue-600 rounded-xl mx-auto mb-4 flex items-center justify-center text-white text-2xl font-bold">TF</div>
                 <h1 class="text-2xl font-bold text-slate-800">Development Hub</h1>
                 <p class="text-slate-500 mt-2">Technical Specification and Data Architecture</p>
             </div>
@@ -61,8 +60,7 @@
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="flex justify-between items-center h-16">
                     <div class="flex items-center gap-4">
-                        <img src="tripfactory-logo.png" alt="TripFactory" class="h-10" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
-                        <div class="hidden h-10 w-10 bg-blue-600 rounded-lg flex items-center justify-center text-white font-bold">TF</div>
+                        <div class="h-10 w-10 bg-blue-600 rounded-lg flex items-center justify-center text-white font-bold">TF</div>
                         <div>
                             <h1 class="text-xl font-bold text-slate-800">Development Hub</h1>
                             <p class="text-xs text-slate-500">Technical Specification v2.0</p>
@@ -72,8 +70,8 @@
                         <span class="px-3 py-1 bg-green-100 text-green-700 rounded-full text-sm font-medium flex items-center gap-2">
                             <span class="w-2 h-2 bg-green-500 rounded-full pulse-dot"></span> Live Document
                         </span>
-                        <button onclick="logout()" class="text-slate-500 hover:text-slate-700">
-                            <i class="fas fa-sign-out-alt"></i>
+                        <button onclick="logout()" class="text-slate-500 hover:text-slate-700 px-3 py-2 rounded-lg hover:bg-slate-100 transition">
+                            <i class="fas fa-sign-out-alt"></i> Logout
                         </button>
                     </div>
                 </div>
@@ -86,9 +84,6 @@
                 <div class="flex space-x-8 overflow-x-auto">
                     <button onclick="showSection('overview')" class="nav-tab tab-active py-4 px-2 text-sm font-medium border-b-2 border-transparent hover:text-blue-600 transition whitespace-nowrap" data-section="overview">
                         <i class="fas fa-home mr-2"></i>Overview
-                    </button>
-                    <button onclick="showSection('datamodels')" class="nav-tab py-4 px-2 text-sm font-medium text-slate-500 border-b-2 border-transparent hover:text-blue-600 transition whitespace-nowrap" data-section="datamodels">
-                        <i class="fas fa-database mr-2"></i>Data Models
                     </button>
                     <button onclick="showSection('algorithms')" class="nav-tab py-4 px-2 text-sm font-medium text-slate-500 border-b-2 border-transparent hover:text-blue-600 transition whitespace-nowrap" data-section="algorithms">
                         <i class="fas fa-calculator mr-2"></i>Algorithms
@@ -174,7 +169,7 @@
                         <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
                             <h3 class="text-xl font-bold text-slate-800 mb-4">Dashboard Categories</h3>
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <div class="border border-slate-200 rounded-lg p-4 hover:border-blue-400 transition">
+                                <div class="border border-slate-200 rounded-lg p-4 hover:border-blue-400 transition cursor-pointer">
                                     <div class="flex items-center gap-3 mb-2">
                                         <div class="w-10 h-10 rounded-lg bg-indigo-100 flex items-center justify-center">
                                             <i class="fas fa-building text-indigo-600"></i>
@@ -183,7 +178,7 @@
                                     </div>
                                     <p class="text-sm text-slate-600">Organisational structure, employee management, department filtering, succession planning.</p>
                                 </div>
-                                <div class="border border-slate-200 rounded-lg p-4 hover:border-blue-400 transition">
+                                <div class="border border-slate-200 rounded-lg p-4 hover:border-blue-400 transition cursor-pointer">
                                     <div class="flex items-center gap-3 mb-2">
                                         <div class="w-10 h-10 rounded-lg bg-blue-100 flex items-center justify-center">
                                             <i class="fas fa-chart-pie text-blue-600"></i>
@@ -192,7 +187,7 @@
                                     </div>
                                     <p class="text-sm text-slate-600">KPIs, competitor intelligence, market analysis, LTV calculations, supplier analytics.</p>
                                 </div>
-                                <div class="border border-slate-200 rounded-lg p-4 hover:border-blue-400 transition">
+                                <div class="border border-slate-200 rounded-lg p-4 hover:border-blue-400 transition cursor-pointer">
                                     <div class="flex items-center gap-3 mb-2">
                                         <div class="w-10 h-10 rounded-lg bg-green-100 flex items-center justify-center">
                                             <i class="fas fa-cogs text-green-600"></i>
@@ -201,7 +196,7 @@
                                     </div>
                                     <p class="text-sm text-slate-600">Workflow management, vehicle tracking (Capeye), inventory systems, quality control.</p>
                                 </div>
-                                <div class="border border-slate-200 rounded-lg p-4 hover:border-blue-400 transition">
+                                <div class="border border-slate-200 rounded-lg p-4 hover:border-blue-400 transition cursor-pointer">
                                     <div class="flex items-center gap-3 mb-2">
                                         <div class="w-10 h-10 rounded-lg bg-orange-100 flex items-center justify-center">
                                             <i class="fas fa-users text-orange-600"></i>
@@ -265,6 +260,7 @@
                     </div>
                 </div>
             </section>
+
             <!-- ALGORITHMS SECTION -->
             <section id="algorithms" class="hidden space-y-6">
                 <h2 class="text-3xl font-bold gradient-text">Algorithms and Calculations</h2>
@@ -500,508 +496,7 @@
                     </div>
                 </div>
             </section>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TripFactory Development Hub - Technical Specification</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        body { font-family: 'Inter', sans-serif; background: #f1f5f9; }
-        .gradient-text { background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .code-block { background: #1e293b; color: #e2e8f0; font-family: 'Monaco', 'Consolas', monospace; }
-        .dashboard-mini { transform: scale(0.9); transform-origin: top left; }
-        .tab-active { border-bottom: 3px solid #3b82f6; color: #1e40af; }
-        .skill-bar { transition: width 1s ease-out; }
-        .hover-lift { transition: transform 0.2s, box-shadow 0.2s; }
-        .hover-lift:hover { transform: translateY(-2px); box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1); }
-        .pulse-dot { animation: pulse 2s infinite; }
-        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
-        .syntax-keyword { color: #c678dd; }
-        .syntax-string { color: #98c379; }
-        .syntax-comment { color: #5c6370; font-style: italic; }
-        .syntax-function { color: #61afef; }
-        .syntax-number { color: #d19a66; }
-    </style>
-</head>
-<body class="bg-slate-50">
 
-    <!-- Login Modal -->
-    <div id="loginModal" class="fixed inset-0 bg-slate-900/80 backdrop-blur-sm z-50 flex items-center justify-center">
-        <div class="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md mx-4">
-            <div class="text-center mb-8">
-                <img src="tripfactory-logo.png" alt="TripFactory" class="h-16 mx-auto mb-4" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
-                <div class="hidden h-16 w-16 bg-blue-600 rounded-xl mx-auto mb-4 flex items-center justify-center text-white text-2xl font-bold">TF</div>
-                <h1 class="text-2xl font-bold text-slate-800">Development Hub</h1>
-                <p class="text-slate-500 mt-2">Technical Specification and Data Architecture</p>
-            </div>
-            <form id="loginForm" class="space-y-4">
-                <div>
-                    <label class="block text-sm font-medium text-slate-700 mb-1">Username</label>
-                    <input type="text" id="username" value="TripFactory" class="w-full px-4 py-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition" placeholder="Enter username">
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-slate-700 mb-1">Password</label>
-                    <input type="password" id="password" value="AKdev" class="w-full px-4 py-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition" placeholder="Enter password">
-                </div>
-                <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-lg transition duration-200 flex items-center justify-center gap-2">
-                    <i class="fas fa-sign-in-alt"></i> Access Documentation
-                </button>
-            </form>
-            <p id="loginError" class="text-red-500 text-sm text-center mt-4 hidden">Invalid credentials. Please try again.</p>
-        </div>
-    </div>
-
-    <!-- Main Application -->
-    <div id="mainApp" class="hidden min-h-screen">
-        <!-- Header -->
-        <header class="bg-white border-b border-slate-200 sticky top-0 z-40">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="flex justify-between items-center h-16">
-                    <div class="flex items-center gap-4">
-                        <img src="tripfactory-logo.png" alt="TripFactory" class="h-10" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
-                        <div class="hidden h-10 w-10 bg-blue-600 rounded-lg flex items-center justify-center text-white font-bold">TF</div>
-                        <div>
-                            <h1 class="text-xl font-bold text-slate-800">Development Hub</h1>
-                            <p class="text-xs text-slate-500">Technical Specification v2.0</p>
-                        </div>
-                    </div>
-                    <div class="flex items-center gap-4">
-                        <span class="px-3 py-1 bg-green-100 text-green-700 rounded-full text-sm font-medium flex items-center gap-2">
-                            <span class="w-2 h-2 bg-green-500 rounded-full pulse-dot"></span> Live Document
-                        </span>
-                        <button onclick="logout()" class="text-slate-500 hover:text-slate-700">
-                            <i class="fas fa-sign-out-alt"></i>
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </header>
-
-        <!-- Navigation -->
-        <nav class="bg-white border-b border-slate-200">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="flex space-x-8 overflow-x-auto">
-                    <button onclick="showSection('overview')" class="nav-tab tab-active py-4 px-2 text-sm font-medium border-b-2 border-transparent hover:text-blue-600 transition whitespace-nowrap" data-section="overview">
-                        <i class="fas fa-home mr-2"></i>Overview
-                    </button>
-                    <button onclick="showSection('datamodels')" class="nav-tab py-4 px-2 text-sm font-medium text-slate-500 border-b-2 border-transparent hover:text-blue-600 transition whitespace-nowrap" data-section="datamodels">
-                        <i class="fas fa-database mr-2"></i>Data Models
-                    </button>
-                    <button onclick="showSection('algorithms')" class="nav-tab py-4 px-2 text-sm font-medium text-slate-500 border-b-2 border-transparent hover:text-blue-600 transition whitespace-nowrap" data-section="algorithms">
-                        <i class="fas fa-calculator mr-2"></i>Algorithms
-                    </button>
-                    <button onclick="showSection('dashboards')" class="nav-tab py-4 px-2 text-sm font-medium text-slate-500 border-b-2 border-transparent hover:text-blue-600 transition whitespace-nowrap" data-section="dashboards">
-                        <i class="fas fa-chart-line mr-2"></i>Dashboard Examples
-                    </button>
-                    <button onclick="showSection('skills')" class="nav-tab py-4 px-2 text-sm font-medium text-slate-500 border-b-2 border-transparent hover:text-blue-600 transition whitespace-nowrap" data-section="skills">
-                        <i class="fas fa-users-cog mr-2"></i>Skill Sets
-                    </button>
-                    <button onclick="showSection('architecture')" class="nav-tab py-4 px-2 text-sm font-medium text-slate-500 border-b-2 border-transparent hover:text-blue-600 transition whitespace-nowrap" data-section="architecture">
-                        <i class="fas fa-sitemap mr-2"></i>Architecture
-                    </button>
-                </div>
-            </div>
-        </nav>
-
-        <!-- Content -->
-        <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-            
-            <!-- OVERVIEW SECTION -->
-            <section id="overview" class="space-y-6">
-                <div class="bg-gradient-to-r from-blue-600 to-indigo-700 rounded-2xl p-8 text-white">
-                    <h2 class="text-3xl font-bold mb-4">TripFactory Dashboard Ecosystem</h2>
-                    <p class="text-blue-100 text-lg mb-6">Comprehensive technical specification for the complete business intelligence and operational management platform.</p>
-                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-                        <div class="bg-white/10 backdrop-blur rounded-lg p-4">
-                            <div class="text-3xl font-bold">18+</div>
-                            <div class="text-sm text-blue-200">Dashboard Modules</div>
-                        </div>
-                        <div class="bg-white/10 backdrop-blur rounded-lg p-4">
-                            <div class="text-3xl font-bold">50+</div>
-                            <div class="text-sm text-blue-200">Data Entities</div>
-                        </div>
-                        <div class="bg-white/10 backdrop-blur rounded-lg p-4">
-                            <div class="text-3xl font-bold">88K</div>
-                            <div class="text-sm text-blue-200">Agent Records</div>
-                        </div>
-                        <div class="bg-white/10 backdrop-blur rounded-lg p-4">
-                            <div class="text-3xl font-bold">12</div>
-                            <div class="text-sm text-blue-200">Workflow Stages</div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                    <div class="lg:col-span-2 space-y-6">
-                        <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
-                            <h3 class="text-xl font-bold text-slate-800 mb-4">Executive Summary</h3>
-                            <p class="text-slate-600 mb-4">This document provides the IT development team with comprehensive specifications for building the TripFactory dashboard ecosystem. The platform spans from high-level executive dashboards to granular operational tools used by 452 employees across 8 departments.</p>
-                            
-                            <div class="space-y-3">
-                                <div class="flex items-start gap-3">
-                                    <div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0 mt-1">
-                                        <i class="fas fa-globe text-blue-600 text-sm"></i>
-                                    </div>
-                                    <div>
-                                        <h4 class="font-semibold text-slate-800">Global Scale</h4>
-                                        <p class="text-sm text-slate-600">Multi-office deployment with UK headquarters (London), India operations, and overseas offices requiring real-time synchronisation.</p>
-                                    </div>
-                                </div>
-                                <div class="flex items-start gap-3">
-                                    <div class="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center flex-shrink-0 mt-1">
-                                        <i class="fas fa-bolt text-green-600 text-sm"></i>
-                                    </div>
-                                    <div>
-                                        <h4 class="font-semibold text-slate-800">Real-Time Requirements</h4>
-                                        <p class="text-sm text-slate-600">Critical dashboards require sub-second refresh rates for operational decision-making and customer-facing displays.</p>
-                                    </div>
-                                </div>
-                                <div class="flex items-start gap-3">
-                                    <div class="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center flex-shrink-0 mt-1">
-                                        <i class="fas fa-mobile-alt text-purple-600 text-sm"></i>
-                                    </div>
-                                    <div>
-                                        <h4 class="font-semibold text-slate-800">Multi-Platform</h4>
-                                        <p class="text-sm text-slate-600">Responsive web applications, progressive web apps (PWA) for field staff, and mobile-optimised interfaces.</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
-                            <h3 class="text-xl font-bold text-slate-800 mb-4">Dashboard Categories</h3>
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <div class="border border-slate-200 rounded-lg p-4 hover:border-blue-400 transition">
-                                    <div class="flex items-center gap-3 mb-2">
-                                        <div class="w-10 h-10 rounded-lg bg-indigo-100 flex items-center justify-center">
-                                            <i class="fas fa-building text-indigo-600"></i>
-                                        </div>
-                                        <h4 class="font-semibold text-slate-800">Command Centre</h4>
-                                    </div>
-                                    <p class="text-sm text-slate-600">Organisational structure, employee management, department filtering, succession planning.</p>
-                                </div>
-                                <div class="border border-slate-200 rounded-lg p-4 hover:border-blue-400 transition">
-                                    <div class="flex items-center gap-3 mb-2">
-                                        <div class="w-10 h-10 rounded-lg bg-blue-100 flex items-center justify-center">
-                                            <i class="fas fa-chart-pie text-blue-600"></i>
-                                        </div>
-                                        <h4 class="font-semibold text-slate-800">Business Intelligence</h4>
-                                    </div>
-                                    <p class="text-sm text-slate-600">KPIs, competitor intelligence, market analysis, LTV calculations, supplier analytics.</p>
-                                </div>
-                                <div class="border border-slate-200 rounded-lg p-4 hover:border-blue-400 transition">
-                                    <div class="flex items-center gap-3 mb-2">
-                                        <div class="w-10 h-10 rounded-lg bg-green-100 flex items-center justify-center">
-                                            <i class="fas fa-cogs text-green-600"></i>
-                                        </div>
-                                        <h4 class="font-semibold text-slate-800">Operations</h4>
-                                    </div>
-                                    <p class="text-sm text-slate-600">Workflow management, vehicle tracking (Capeye), inventory systems, quality control.</p>
-                                </div>
-                                <div class="border border-slate-200 rounded-lg p-4 hover:border-blue-400 transition">
-                                    <div class="flex items-center gap-3 mb-2">
-                                        <div class="w-10 h-10 rounded-lg bg-orange-100 flex items-center justify-center">
-                                            <i class="fas fa-users text-orange-600"></i>
-                                        </div>
-                                        <h4 class="font-semibold text-slate-800">Agent Network</h4>
-                                    </div>
-                                    <p class="text-sm text-slate-600">88,000 agent segmentation, targeting tools, intelligence hub, ORN Agent App.</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="space-y-6">
-                        <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
-                            <h3 class="font-bold text-slate-800 mb-4">Quick Stats</h3>
-                            <div class="space-y-4">
-                                <div class="flex justify-between items-center py-2 border-b border-slate-100">
-                                    <span class="text-slate-600">Total Employees</span>
-                                    <span class="font-bold text-slate-800">452</span>
-                                </div>
-                                <div class="flex justify-between items-center py-2 border-b border-slate-100">
-                                    <span class="text-slate-600">Departments</span>
-                                    <span class="font-bold text-slate-800">8</span>
-                                </div>
-                                <div class="flex justify-between items-center py-2 border-b border-slate-100">
-                                    <span class="text-slate-600">Active Agents</span>
-                                    <span class="font-bold text-slate-800">88,000+</span>
-                                </div>
-                                <div class="flex justify-between items-center py-2 border-b border-slate-100">
-                                    <span class="text-slate-600">Workflow Stages</span>
-                                    <span class="font-bold text-slate-800">12</span>
-                                </div>
-                                <div class="flex justify-between items-center py-2">
-                                    <span class="text-slate-600">Data Sources</span>
-                                    <span class="font-bold text-slate-800">15+</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="bg-gradient-to-br from-slate-800 to-slate-900 rounded-xl p-6 text-white">
-                            <h3 class="text-lg font-bold mb-4">Document Status</h3>
-                            <div class="space-y-3">
-                                <div class="flex items-center gap-2">
-                                    <i class="fas fa-check-circle text-green-400"></i>
-                                    <span class="text-sm">Data Models: Complete</span>
-                                </div>
-                                <div class="flex items-center gap-2">
-                                    <i class="fas fa-check-circle text-green-400"></i>
-                                    <span class="text-sm">Algorithms: Complete</span>
-                                </div>
-                                <div class="flex items-center gap-2">
-                                    <i class="fas fa-clock text-yellow-400"></i>
-                                    <span class="text-sm">API Specifications: In Review</span>
-                                </div>
-                                <div class="flex items-center gap-2">
-                                    <i class="fas fa-circle text-blue-400"></i>
-                                    <span class="text-sm">Last Updated: 17 Feb 2026</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-            <!-- ALGORITHMS SECTION -->
-            <section id="algorithms" class="hidden space-y-6">
-                <h2 class="text-3xl font-bold gradient-text">Algorithms and Calculations</h2>
-                
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                    <!-- LTV Calculation -->
-                    <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
-                        <div class="p-4 bg-gradient-to-r from-blue-50 to-indigo-50 border-b border-slate-200">
-                            <h3 class="font-bold text-slate-800 flex items-center gap-2">
-                                <i class="fas fa-calculator text-blue-600"></i>
-                                Customer Lifetime Value (LTV)
-                            </h3>
-                        </div>
-                        <div class="p-4">
-                            <p class="text-sm text-slate-600 mb-4">Predicts total revenue a customer will generate over their relationship with TripFactory.</p>
-                            
-                            <div class="code-block rounded-lg p-4 text-sm overflow-x-auto mb-4">
-                                <pre><code><span class="syntax-comment">// LTV Algorithm - Weighted Historical + Predictive</span>
-<span class="syntax-keyword">function</span> <span class="syntax-function">calculateLTV</span>(customerId) {
-  <span class="syntax-keyword">const</span> customer = <span class="syntax-function">getCustomer</span>(customerId);
-  
-  <span class="syntax-comment">// Historical metrics</span>
-  <span class="syntax-keyword">const</span> avgBookingValue = customer.totalRevenue / customer.bookingCount;
-  <span class="syntax-keyword">const</span> purchaseFrequency = customer.bookingCount / 
-    <span class="syntax-function">monthsSinceFirstBooking</span>(customer);
-  <span class="syntax-keyword">const</span> grossMargin = <span class="syntax-number">0.18</span>;
-  
-  <span class="syntax-comment">// Retention calculation</span>
-  <span class="syntax-keyword">const</span> daysSinceLastBooking = <span class="syntax-function">daysSince</span>(customer.lastBooking);
-  <span class="syntax-keyword">let</span> retentionRate;
-  
-  <span class="syntax-keyword">if</span> (daysSinceLastBooking &lt; <span class="syntax-number">90</span>) retentionRate = <span class="syntax-number">0.85</span>;
-  <span class="syntax-keyword">else if</span> (daysSinceLastBooking &lt; <span class="syntax-number">180</span>) retentionRate = <span class="syntax-number">0.65</span>;
-  <span class="syntax-keyword">else</span> retentionRate = <span class="syntax-number">0.20</span>;
-  
-  <span class="syntax-keyword">const</span> lifespan = <span class="syntax-number">3</span> + (customer.loyaltyTier === <span class="syntax-string">'Platinum'</span> ? <span class="syntax-number">2</span> : <span class="syntax-number">0</span>);
-  
-  <span class="syntax-keyword">const</span> ltv = (avgBookingValue * purchaseFrequency * grossMargin * lifespan) 
-              * retentionRate;
-  
-  <span class="syntax-keyword">return</span> {
-    value: <span class="syntax-function">round</span>(ltv, <span class="syntax-number">2</span>),
-    tier: <span class="syntax-function">assignTier</span>(ltv),
-    confidence: <span class="syntax-function">calculateConfidence</span>(customer.bookingCount)
-  };
-}</code></pre>
-                            </div>
-                            
-                            <div class="grid grid-cols-3 gap-2 text-center text-xs">
-                                <div class="bg-green-50 p-2 rounded">
-                                    <div class="font-bold text-green-700">Bronze</div>
-                                    <div class="text-green-600">&lt; GBP500</div>
-                                </div>
-                                <div class="bg-blue-50 p-2 rounded">
-                                    <div class="font-bold text-blue-700">Silver</div>
-                                    <div class="text-blue-600">GBP500-2K</div>
-                                </div>
-                                <div class="bg-purple-50 p-2 rounded">
-                                    <div class="font-bold text-purple-700">Gold</div>
-                                    <div class="text-purple-600">GBP2K-5K</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Days in Stock -->
-                    <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
-                        <div class="p-4 bg-gradient-to-r from-green-50 to-emerald-50 border-b border-slate-200">
-                            <h3 class="font-bold text-slate-800 flex items-center gap-2">
-                                <i class="fas fa-clock text-green-600"></i>
-                                Vehicle Days in Stock (Capeye)
-                            </h3>
-                        </div>
-                        <div class="p-4">
-                            <p class="text-sm text-slate-600 mb-4">Critical metric for inventory management and depreciation calculations.</p>
-                            
-                            <div class="code-block rounded-lg p-4 text-sm overflow-x-auto mb-4">
-                                <pre><code><span class="syntax-comment">// Days in Stock with Business Rules</span>
-<span class="syntax-keyword">function</span> <span class="syntax-function">calculateDaysInStock</span>(vehicle) {
-  <span class="syntax-keyword">const</span> today = <span class="syntax-keyword">new</span> <span class="syntax-function">Date</span>();
-  <span class="syntax-keyword">let</span> startDate;
-  
-  <span class="syntax-comment">// Rule 1: Use date_in_stock if available</span>
-  <span class="syntax-keyword">if</span> (vehicle.dateInStock) {
-    startDate = <span class="syntax-keyword">new</span> <span class="syntax-function">Date</span>(vehicle.dateInStock);
-  } 
-  <span class="syntax-comment">// Rule 2: Fallback to created_at</span>
-  <span class="syntax-keyword">else if</span> (vehicle.createdAt) {
-    startDate = <span class="syntax-keyword">new</span> <span class="syntax-function">Date</span>(vehicle.createdAt);
-  }
-  <span class="syntax-comment">// Rule 3: Use registration date minus 7 days</span>
-  <span class="syntax-keyword">else if</span> (vehicle.regDate) {
-    startDate = <span class="syntax-keyword">new</span> <span class="syntax-function">Date</span>(vehicle.regDate);
-    startDate.<span class="syntax-function">setDate</span>(startDate.<span class="syntax-function">getDate</span>() - <span class="syntax-number">7</span>);
-  }
-  <span class="syntax-keyword">else</span> {
-    <span class="syntax-keyword">return</span> <span class="syntax-keyword">null</span>;
-  }
-  
-  <span class="syntax-keyword">let</span> days = <span class="syntax-number">0</span>;
-  <span class="syntax-keyword">let</span> current = <span class="syntax-keyword">new</span> <span class="syntax-function">Date</span>(startDate);
-  
-  <span class="syntax-keyword">while</span> (current &lt; today) {
-    <span class="syntax-keyword">const</span> dayOfWeek = current.<span class="syntax-function">getDay</span>();
-    <span class="syntax-keyword">if</span> (dayOfWeek !== <span class="syntax-number">0</span> && dayOfWeek !== <span class="syntax-number">6</span>) {
-      days++;
-    }
-    current.<span class="syntax-function">setDate</span>(current.<span class="syntax-function">getDate</span>() + <span class="syntax-number">1</span>);
-  }
-  
-  <span class="syntax-keyword">return</span> {
-    calendarDays: <span class="syntax-function">Math.floor</span>((today - startDate) / (<span class="syntax-number">1000</span>*<span class="syntax-number">60</span>*<span class="syntax-number">60</span>*<span class="syntax-number">24</span>)),
-    businessDays: days,
-    ageingStatus: days &gt; <span class="syntax-number">90</span> ? <span class="syntax-string">'Critical'</span> : 
-                  days &gt; <span class="syntax-number">60</span> ? <span class="syntax-string">'Warning'</span> : <span class="syntax-string">'Normal'</span>
-  };
-}</code></pre>
-                            </div>
-                            
-                            <div class="flex gap-2 text-xs">
-                                <span class="px-2 py-1 bg-green-100 text-green-700 rounded">&lt; 60 days: Normal</span>
-                                <span class="px-2 py-1 bg-orange-100 text-orange-700 rounded">60-90 days: Warning</span>
-                                <span class="px-2 py-1 bg-red-100 text-red-700 rounded">&gt; 90 days: Critical</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Agent Segmentation -->
-                    <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
-                        <div class="p-4 bg-gradient-to-r from-orange-50 to-amber-50 border-b border-slate-200">
-                            <h3 class="font-bold text-slate-800 flex items-center gap-2">
-                                <i class="fas fa-users-cog text-orange-600"></i>
-                                Agent Segmentation Score
-                            </h3>
-                        </div>
-                        <div class="p-4">
-                            <p class="text-sm text-slate-600 mb-4">Ranks 88,000 agents for targeted marketing and resource allocation.</p>
-                            
-                            <div class="code-block rounded-lg p-4 text-sm overflow-x-auto mb-4">
-                                <pre><code><span class="syntax-comment">// Multi-Factor Agent Scoring (0-100)</span>
-<span class="syntax-keyword">function</span> <span class="syntax-function">calculateAgentScore</span>(agent) {
-  <span class="syntax-keyword">const</span> weights = {
-    revenue: <span class="syntax-number">0.35</span>,
-    volume: <span class="syntax-number">0.25</span>,
-    recency: <span class="syntax-number">0.20</span>,
-    diversity: <span class="syntax-number">0.15</span>,
-    growth: <span class="syntax-number">0.05</span>
-  };
-  
-  <span class="syntax-keyword">const</span> revenueScore = <span class="syntax-function">min</span>(agent.monthlyRevenue / <span class="syntax-number">50000</span>, <span class="syntax-number">1</span>);
-  <span class="syntax-keyword">const</span> volumeScore = <span class="syntax-function">min</span>(agent.monthlyBookings / <span class="syntax-number">100</span>, <span class="syntax-number">1</span>);
-  
-  <span class="syntax-keyword">const</span> daysSince = <span class="syntax-function">daysSinceLastBooking</span>(agent);
-  <span class="syntax-keyword">const</span> recencyScore = <span class="syntax-function">exp</span>(-daysSince / <span class="syntax-number">30</span>);
-  
-  <span class="syntax-keyword">const</span> diversityScore = <span class="syntax-function">calculateDiversity</span>(
-    agent.destinationDistribution
-  );
-  
-  <span class="syntax-keyword">const</span> growthScore = <span class="syntax-function">calculateGrowthRate</span>(
-    agent.revenueHistory, <span class="syntax-number">6</span>
-  );
-  
-  <span class="syntax-keyword">const</span> finalScore = (
-    revenueScore * weights.revenue +
-    volumeScore * weights.volume +
-    recencyScore * weights.recency +
-    diversityScore * weights.diversity +
-    growthScore * weights.growth
-  ) * <span class="syntax-number">100</span>;
-  
-  <span class="syntax-keyword">return</span> {
-    score: <span class="syntax-function">round</span>(finalScore, <span class="syntax-number">1</span>),
-    tier: <span class="syntax-function">assignAgentTier</span>(finalScore),
-    factors: { revenueScore, volumeScore, recencyScore }
-  };
-}</code></pre>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Margin Analysis -->
-                    <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
-                        <div class="p-4 bg-gradient-to-r from-purple-50 to-pink-50 border-b border-slate-200">
-                            <h3 class="font-bold text-slate-800 flex items-center gap-2">
-                                <i class="fas fa-percentage text-purple-600"></i>
-                                Dynamic Margin Analysis
-                            </h3>
-                        </div>
-                        <div class="p-4">
-                            <p class="text-sm text-slate-600 mb-4">Real-time profitability calculations with market adjustments.</p>
-                            
-                            <div class="code-block rounded-lg p-4 text-sm overflow-x-auto mb-4">
-                                <pre><code><span class="syntax-comment">// Margin Calculation with Market Factors</span>
-<span class="syntax-keyword">function</span> <span class="syntax-function">calculateDynamicMargin</span>(booking) {
-  <span class="syntax-keyword">const</span> baseCost = booking.supplierCost;
-  <span class="syntax-keyword">const</span> sellingPrice = booking.totalPrice;
-  <span class="syntax-keyword">const</span> baseMargin = sellingPrice - baseCost;
-  
-  <span class="syntax-keyword">let</span> adjustments = [];
-  
-  <span class="syntax-comment">// Seasonality factor</span>
-  <span class="syntax-keyword">const</span> month = <span class="syntax-function">getMonth</span>(booking.travelDate);
-  <span class="syntax-keyword">const</span> seasonalMultiplier = [<span class="syntax-number">1.1</span>, <span class="syntax-number">1.05</span>, <span class="syntax-number">1.0</span>, <span class="syntax-number">0.95</span>, 
-    <span class="syntax-number">0.95</span>, <span class="syntax-number">1.0</span>, <span class="syntax-number">1.15</span>, <span class="syntax-number">1.2</span>, <span class="syntax-number">1.1</span>, <span class="syntax-number">1.0</span>, 
-    <span class="syntax-number">0.95</span>, <span class="syntax-number">1.05</span>][month];
-  
-  <span class="syntax-comment">// Volume discount</span>
-  <span class="syntax-keyword">const</span> volumeDiscount = booking.agent?.monthlyVolume &gt; <span class="syntax-number">50</span> ? 
-    <span class="syntax-number">0.02</span> : <span class="syntax-number">0</span>;
-  
-  <span class="syntax-comment">// Urgency premium</span>
-  <span class="syntax-keyword">const</span> daysToTravel = <span class="syntax-function">daysUntil</span>(booking.travelDate);
-  <span class="syntax-keyword">const</span> urgencyPremium = daysToTravel &lt; <span class="syntax-number">7</span> ? <span class="syntax-number">0.05</span> : <span class="syntax-number">0</span>;
-  
-  <span class="syntax-keyword">const</span> adjustedCost = baseCost * (<span class="syntax-number">1</span> - volumeDiscount);
-  <span class="syntax-keyword">const</span> adjustedPrice = sellingPrice * (<span class="syntax-number">1</span> + urgencyPremium) 
-    * seasonalMultiplier;
-  
-  <span class="syntax-keyword">const</span> finalMargin = adjustedPrice - adjustedCost;
-  <span class="syntax-keyword">const</span> marginPercent = (finalMargin / adjustedPrice) * <span class="syntax-number">100</span>;
-  
-  <span class="syntax-keyword">return</span> {
-    grossMargin: <span class="syntax-function">round</span>(finalMargin, <span class="syntax-number">2</span>),
-    marginPercent: <span class="syntax-function">round</span>(marginPercent, <span class="syntax-number">1</span>),
-    health: marginPercent &gt; <span class="syntax-number">20</span> ? <span class="syntax-string">'Excellent'</span> :
-            marginPercent &gt; <span class="syntax-number">15</span> ? <span class="syntax-string">'Good'</span> :
-            marginPercent &gt; <span class="syntax-number">10</span> ? <span class="syntax-string">'Fair'</span> : <span class="syntax-string">'Poor'</span>
-  };
-}</code></pre>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
             <!-- DASHBOARD EXAMPLES SECTION -->
             <section id="dashboards" class="hidden space-y-6">
                 <h2 class="text-3xl font-bold gradient-text">Dashboard Examples</h2>
@@ -1251,6 +746,7 @@
                     </div>
                 </div>
             </section>
+
             <!-- SKILLS SECTION -->
             <section id="skills" class="hidden space-y-6">
                 <h2 class="text-3xl font-bold gradient-text">Required Skill Sets</h2>
@@ -1713,46 +1209,59 @@
             </div>
         </footer>
     </div>
+
     <script>
         // Login functionality
         document.getElementById('loginForm').addEventListener('submit', function(e) {
             e.preventDefault();
-            const username = document.getElementById('username').value;
-            const password = document.getElementById('password').value;
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value.trim();
+            const errorMsg = document.getElementById('loginError');
             
             if (username === 'TripFactory' && password === 'AKdev') {
-                // Hide login modal completely
-                const loginModal = document.getElementById('loginModal');
-                loginModal.style.display = 'none';
+                // Hide login modal
+                document.getElementById('loginModal').style.display = 'none';
                 
                 // Show main app
-                const mainApp = document.getElementById('mainApp');
-                mainApp.classList.remove('hidden');
+                document.getElementById('mainApp').classList.remove('hidden');
                 
-                // Store auth
+                // Store auth in localStorage
                 localStorage.setItem('tfdev_auth', 'true');
+                localStorage.setItem('tfdev_user', username);
+                
+                // Clear any error
+                errorMsg.classList.add('hidden');
             } else {
-                document.getElementById('loginError').classList.remove('hidden');
+                // Show error
+                errorMsg.classList.remove('hidden');
+                // Shake animation on form
+                const form = document.getElementById('loginForm');
+                form.style.animation = 'shake 0.5s';
+                setTimeout(() => {
+                    form.style.animation = '';
+                }, 500);
             }
         });
 
+        // Logout function
         function logout() {
             localStorage.removeItem('tfdev_auth');
+            localStorage.removeItem('tfdev_user');
             location.reload();
         }
 
-        // Check auth on load
+        // Check auth on page load
         window.addEventListener('DOMContentLoaded', function() {
             if (localStorage.getItem('tfdev_auth') === 'true') {
-                const loginModal = document.getElementById('loginModal');
-                loginModal.style.display = 'none';
+                // Hide login modal
+                document.getElementById('loginModal').style.display = 'none';
                 
-                const mainApp = document.getElementById('mainApp');
-                mainApp.classList.remove('hidden');
+                // Show main app
+                document.getElementById('mainApp').classList.remove('hidden');
             }
         });
 
-        // Navigation
+        // Navigation between sections
         function showSection(sectionId) {
             // Hide all sections
             document.querySelectorAll('main > section').forEach(section => {
@@ -1760,9 +1269,12 @@
             });
             
             // Show selected section
-            document.getElementById(sectionId).classList.remove('hidden');
+            const selectedSection = document.getElementById(sectionId);
+            if (selectedSection) {
+                selectedSection.classList.remove('hidden');
+            }
             
-            // Update nav tabs
+            // Update nav tabs styling
             document.querySelectorAll('.nav-tab').forEach(tab => {
                 tab.classList.remove('tab-active');
                 tab.classList.add('text-slate-500');
@@ -1776,30 +1288,6 @@
             if (sectionId === 'dashboards') {
                 setTimeout(initCharts, 100);
             }
-        }
-
-        // Entity toggles
-        function toggleEntity(entityId) {
-            const element = document.getElementById('entity-' + entityId);
-            const icon = document.getElementById('icon-' + entityId);
-            
-            if (element.classList.contains('hidden')) {
-                element.classList.remove('hidden');
-                icon.style.transform = 'rotate(180deg)';
-            } else {
-                element.classList.add('hidden');
-                icon.style.transform = 'rotate(0deg)';
-            }
-        }
-
-        function expandAllData() {
-            document.querySelectorAll('[id^="entity-"]').forEach(el => el.classList.remove('hidden'));
-            document.querySelectorAll('[id^="icon-"]').forEach(el => el.style.transform = 'rotate(180deg)');
-        }
-
-        function collapseAllData() {
-            document.querySelectorAll('[id^="entity-"]').forEach(el => el.classList.add('hidden'));
-            document.querySelectorAll('[id^="icon-"]').forEach(el => el.style.transform = 'rotate(0deg)');
         }
 
         // Chart initialisation
@@ -1859,27 +1347,16 @@
             }
         }
 
-        // Animate skill bars on scroll
-        const observerOptions = {
-            threshold: 0.5
-        };
-
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.querySelectorAll('.skill-bar').forEach(bar => {
-                        bar.style.width = bar.style.width;
-                    });
-                }
-            });
-        }, observerOptions);
-
-        document.addEventListener('DOMContentLoaded', () => {
-            const skillsSection = document.getElementById('skills');
-            if (skillsSection) {
-                observer.observe(skillsSection);
+        // Add shake animation style
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes shake {
+                0%, 100% { transform: translateX(0); }
+                25% { transform: translateX(-10px); }
+                75% { transform: translateX(10px); }
             }
-        });
+        `;
+        document.head.appendChild(style);
     </script>
 </body>
 </html>
